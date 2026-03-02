@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>aspnet-RealEstatePortal.Web-e9c435f6-6c97-45f9-8f49-9519dc39513a</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="8.0.24" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.24" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.24" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.24" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.24" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.24" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.23" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RealEstatePortal.Data.Common\RealEstatePortal.Data.Common.csproj" />
+    <ProjectReference Include="..\RealEstatePortal.Data.Models\RealEstatePortal.Data.Models.csproj" />
+    <ProjectReference Include="..\RealEstatePortal.Data\RealEstatePortal.Data.csproj" />
+    <ProjectReference Include="..\RealEstatePortal.GCommon\RealEstatePortal.GCommon.csproj" />
+    <ProjectReference Include="..\RealEstatePortal.Services.Common\RealEstatePortal.Services.Common.csproj" />
+    <ProjectReference Include="..\RealEstatePortal.Services.Core\RealEstatePortal.Services.Core.csproj" />
+    <ProjectReference Include="..\RealEstatePortal.Web.ViewModels\RealEstatePortal.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>

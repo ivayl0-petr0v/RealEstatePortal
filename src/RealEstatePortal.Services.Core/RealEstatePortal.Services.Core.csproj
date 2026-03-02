@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RealEstatePortal.Data.Models\RealEstatePortal.Data.Models.csproj" />
+    <ProjectReference Include="..\RealEstatePortal.Data\RealEstatePortal.Data.csproj" />
+    <ProjectReference Include="..\RealEstatePortal.GCommon\RealEstatePortal.GCommon.csproj" />
+    <ProjectReference Include="..\RealEstatePortal.Web.ViewModels\RealEstatePortal.Web.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>
