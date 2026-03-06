@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/Data/">
+    <Project Path="RealEstatePortal.Data.Common/RealEstatePortal.Data.Common.csproj" Id="6a93f90a-a02a-47f3-a9b3-57df7c90e57a" />
+    <Project Path="RealEstatePortal.Data.Models/RealEstatePortal.Data.Models.csproj" />
+    <Project Path="RealEstatePortal.Data/RealEstatePortal.Data.csproj" Id="613147d6-4be3-4331-a47d-c566dcfab500" />
+  </Folder>
+  <Folder Name="/Services/">
+    <Project Path="RealEstatePortal.Services.Common/RealEstatePortal.Services.Common.csproj" Id="3a4ba41d-d19c-46a2-a217-25ce0dd3a43b" />
+    <Project Path="RealEstatePortal.Services.Core/RealEstatePortal.Services.Core.csproj" Id="63448289-ac03-4f7f-8532-a80bb7958e97" />
+  </Folder>
+  <Folder Name="/Web/">
+    <Project Path="RealEstatePortal.Web.ViewModels/RealEstatePortal.Web.ViewModels.csproj" />
+    <Project Path="RealEstatePortal.Web/RealEstatePortal.Web.csproj" />
+  </Folder>
+  <Project Path="RealEstatePortal.GCommon/RealEstatePortal.GCommon.csproj" Id="9ca27368-4cb6-43a1-9b28-c07cf7d2226a" />
+</Solution>
