@@ -4,19 +4,20 @@
 
 namespace RealEstatePortal.Web.Areas.Identity.Pages.Account
 {
-    using System.ComponentModel.DataAnnotations;
-    
+
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.RazorPages;
+    using Data.Models;
+    using System.ComponentModel.DataAnnotations;
 
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
         private readonly ILogger<LoginModel> logger;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
         {
             this.signInManager = signInManager;
             this.logger = logger;

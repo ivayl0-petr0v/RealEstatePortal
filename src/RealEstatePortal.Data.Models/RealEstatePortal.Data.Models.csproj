@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\RealEstatePortal.Data.Common\RealEstatePortal.Data.Common.csproj" />
     <ProjectReference Include="..\RealEstatePortal.GCommon\RealEstatePortal.GCommon.csproj" />
   </ItemGroup>
 
