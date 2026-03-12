@@ -1,9 +1,9 @@
 namespace RealEstatePortal.Web
 {
     using Data;
-
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+    using RealEstatePortal.Data.Models;
 
     public class Program
     {
@@ -15,15 +15,15 @@ namespace RealEstatePortal.Web
             string connectionString = builder.Configuration
                 .GetConnectionString("SqlServerDev") ?? throw new InvalidOperationException("Connection string 'SqlServerDev' not found.");
 
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            builder.Services.AddDbContext<RealEstateDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services
-                .AddDefaultIdentity<IdentityUser>(options =>
+                .AddDefaultIdentity<ApplicationUser>(options =>
                 {
                     ConfigureIdentity(builder.Configuration, options);
-                }).AddEntityFrameworkStores<ApplicationDbContext>();
+                }).AddEntityFrameworkStores<RealEstateDbContext>();
 
             builder.Services.AddControllersWithViews();
 
