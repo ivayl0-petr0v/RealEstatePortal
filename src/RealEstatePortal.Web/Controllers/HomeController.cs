@@ -1,9 +1,7 @@
 namespace RealEstatePortal.Web.Controllers
 {
     using System.Diagnostics;
-
     using RealEstatePortal.Web.ViewModels;
-
     using Microsoft.AspNetCore.Mvc;
 
     public class HomeController : Controller
