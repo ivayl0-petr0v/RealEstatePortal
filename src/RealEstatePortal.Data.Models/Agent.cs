@@ -7,7 +7,7 @@
         public Guid Id { get; set; } = Guid.NewGuid();
 
         public string UserId { get; set; } = null!;
-        public ApplicationUser User { get; set; } = null!;
+        public virtual ApplicationUser User { get; set; } = null!;
 
         public string FullName { get; set; } = null!;
 
@@ -33,10 +33,10 @@
 
         public string? InstagramUrl { get; set; }
 
-        public ICollection<RealEstate> RealEstates { get; set; }
+        public virtual ICollection<RealEstate> RealEstates { get; set; }
             = new HashSet<RealEstate>();
 
-        public ICollection<AgentLanguage> SpokenLanguages { get; set; }
+        public virtual ICollection<AgentLanguage> SpokenLanguages { get; set; }
             = new HashSet<AgentLanguage>();
     }
 }
