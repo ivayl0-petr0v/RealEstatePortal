@@ -4,10 +4,10 @@
 
     public class ApplicationUser : IdentityUser
     {
-        public ICollection<UserFavoriteRealEstate> FavoriteRealEstates { get; set; }
+        public virtual ICollection<UserFavoriteRealEstate> FavoriteRealEstates { get; set; }
             = new HashSet<UserFavoriteRealEstate>();
 
-        public ICollection<Inquiry> Inquiries { get; set; }
+        public virtual ICollection<Inquiry> Inquiries { get; set; }
             = new HashSet<Inquiry>();
     }
 }

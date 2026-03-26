@@ -8,7 +8,7 @@
 
         public string Name { get; set; } = null!;
 
-        public ICollection<RealEstateFeature> RealEstateFeatures { get; set; }
+        public virtual ICollection<RealEstateFeature> RealEstateFeatures { get; set; }
             = new HashSet<RealEstateFeature>();
     }
 }

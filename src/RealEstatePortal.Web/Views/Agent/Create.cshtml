@@ -1,0 +1,151 @@
+﻿@model AgentFormModel
+
+@{
+	ViewData["Title"] = "Become an agent";
+}
+
+<div class="container py-5">
+    
+	<div class="mb-5">
+		<h1 class="fw-bold mb-2">Become an agent</h1>
+	</div>
+
+	<form method="post" asp-action="Create" asp-controller="Agent" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
+		<div asp-validation-summary="All"></div>
+
+		<div class="row g-4">
+            
+			<div class="col-lg-6">
+                
+				<div class="form-card">
+					<h5>Обща информация</h5>
+                    
+					<div class="input-group-custom">
+						<label class="form-label-custom">Линк към профилна снимка (URL)</label>
+						<input asp-for="AvatarUrl" class="form-control" placeholder="Линк към аватар" />
+						<span asp-validation-for="AvatarUrl" class="text-danger small"></span>
+					</div>
+
+					<div class="input-group-custom">
+						<label class="form-label-custom">Имейл</label>
+						<input asp-for="Email" class="form-control" placeholder="Имейл адрес" />
+						<span asp-validation-for="Email" class="text-danger small"></span>
+					</div>
+
+					<div class="input-group-custom">
+						<label class="form-label-custom">Имена</label>
+						<input asp-for="FullName" class="form-control" placeholder="Имена" />
+						<span asp-validation-for="FullName" class="text-danger small"></span>
+					</div>
+
+					<div class="input-group-custom">
+						<label class="form-label-custom">Адрес</label>
+						<input asp-for="Address" class="form-control" placeholder="Адрес" />
+						<span asp-validation-for="Address" class="text-danger small"></span>
+					</div>
+
+					<div class="input-group-custom mb-0">
+						<label class="form-label-custom">Телефон</label>
+						<input asp-for="PhoneNumber" class="form-control" placeholder="Телефон" />
+						<span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+					</div>
+				</div>
+
+				<div class="form-card">
+					<h5>Работно време</h5>
+                    
+					<label class="form-label-custom">Work days</label>
+					<div class="row g-3 mb-3">
+						<div class="col-6">
+							<select asp-for="WorkingDaysStart" class="form-select">
+								<option value="">From</option>
+								<option value="Monday">Monday</option>
+								<option value="Tuesday">Tuesday</option>
+								<option value="Wednesday">Wednesday</option>
+								<option value="Thursday">Thursday</option>
+								<option value="Friday">Friday</option>
+								<option value="Saturday">Saturday</option>
+								<option value="Sunday">Sunday</option>
+							</select>
+						</div>
+						<div class="col-6">
+							<select asp-for="WorkingDaysEnd" class="form-select">
+								<option value="">To</option>
+								<option value="Monday">Monday</option>
+								<option value="Tuesday">Tuesday</option>
+								<option value="Wednesday">Wednesday</option>
+								<option value="Thursday">Thursday</option>
+								<option value="Friday">Friday</option>
+								<option value="Saturday">Saturday</option>
+								<option value="Sunday">Sunday</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="row g-3 mb-3">
+						<div class="col-6">
+							<label class="form-label-custom">Beginning</label>
+							<input type="time" asp-for="WorkingHoursStart" class="form-control" value="08:30" />
+						</div>
+						<div class="col-6">
+							<label class="form-label-custom">End</label>
+							<input type="time" asp-for="WorkingHoursEnd" class="form-control" value="17:00" />
+						</div>
+					</div>
+
+					<div>
+						<label class="form-label-custom">Rest days</label>
+						<input asp-for="RestDays" class="form-control" placeholder="Saturday, Sunday" />
+					</div>
+				</div>
+
+			</div>
+
+			<div class="col-lg-6">
+                
+				<div class="form-card">
+					<h5>Описание</h5>
+					<div class="input-group-custom mb-0">
+						<textarea asp-for="Description" class="form-control" rows="8" placeholder="Опишете вашия опит и подход..."></textarea>
+						<span asp-validation-for="Description" class="text-danger small"></span>
+					</div>
+				</div>
+
+				<div class="form-card">
+					<h5>Връзки</h5>
+					<div class="input-group-custom">
+						<label class="form-label-custom">Facebook</label>
+						<input asp-for="FacebookUrl" class="form-control" />
+					</div>
+					<div class="input-group-custom">
+						<label class="form-label-custom">Уебсайт</label>
+						<input asp-for="WebsiteUrl" class="form-control" />
+					</div>
+					<div class="input-group-custom mb-0">
+						<label class="form-label-custom">Instagram</label>
+						<input asp-for="InstagramUrl" class="form-control" />
+					</div>
+				</div>
+
+				<div class="form-card">
+					<h5>Говорими езици</h5>
+					<div class="input-group-custom mb-0">
+						<label class="form-label-custom">Enter languages</label>
+						<input asp-for="SpokenLanguages" class="form-control" placeholder="English, German, Russian" />
+						<span asp-validation-for="SpokenLanguages" class="text-danger small"></span>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="d-flex justify-content-end mt-4 mb-5">
+			<button type="submit" class="btn btn-theme px-5 py-2 fs-5">Register an agent</button>
+		</div>
+
+	</form>
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}

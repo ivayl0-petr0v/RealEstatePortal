@@ -18,9 +18,9 @@
         public DateTime CreatedAt { get; set; }
 
         public Guid RealEstateId { get; set; }
-        public RealEstate RealEstate { get; set; } = null!;
+        public virtual RealEstate RealEstate { get; set; } = null!;
 
         public string? UserId { get; set; }
-        public ApplicationUser? User { get; set; }
+        public virtual ApplicationUser? User { get; set; }
     }
 }

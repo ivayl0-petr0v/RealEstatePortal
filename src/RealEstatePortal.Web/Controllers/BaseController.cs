@@ -7,6 +7,7 @@
     [Authorize]
     public class BaseController : Controller
     {
-        protected string? GetCurrentUserId() => User?.FindFirstValue(ClaimTypes.NameIdentifier);
+        protected string? GetCurrentUserId()
+            => User?.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 }

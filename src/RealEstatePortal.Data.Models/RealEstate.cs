@@ -38,25 +38,27 @@
 
         public Status Status { get; set; }
 
+        // TODO: Add IsDeleted property for soft deletion
+
         public int CategoryId { get; set; }
-        public Category Category { get; set; } = null!;
+        public virtual Category Category { get; set; } = null!;
 
         public int CityId { get; set; }
-        public City City { get; set; } = null!;
+        public virtual City City { get; set; } = null!;
 
         public Guid AgentId { get; set; }
-        public Agent Agent { get; set; } = null!;
+        public virtual Agent Agent { get; set; } = null!;
 
-        public ICollection<RealEstateImage> RealEstateImages { get; set; }
+        public virtual ICollection<RealEstateImage> RealEstateImages { get; set; }
             = new HashSet<RealEstateImage>();
 
-        public ICollection<RealEstateFeature> RealEstateFeatures { get; set; }
+        public virtual ICollection<RealEstateFeature> RealEstateFeatures { get; set; }
             = new HashSet<RealEstateFeature>();
 
-        public ICollection<Inquiry> Inquiries { get; set; }
+        public virtual ICollection<Inquiry> Inquiries { get; set; }
             = new HashSet<Inquiry>();
 
-        public ICollection<UserFavoriteRealEstate> FavoriteRealEstates { get; set; }
+        public virtual ICollection<UserFavoriteRealEstate> FavoriteRealEstates { get; set; }
             = new HashSet<UserFavoriteRealEstate>();
     }
 }

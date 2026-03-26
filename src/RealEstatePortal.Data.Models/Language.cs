@@ -8,7 +8,7 @@
 
         public string Name { get; set; } = null!;
 
-        public ICollection<AgentLanguage> AgentLanguages { get; set; }
+        public virtual ICollection<AgentLanguage> AgentLanguages { get; set; }
             = new HashSet<AgentLanguage>();
     }
 }
