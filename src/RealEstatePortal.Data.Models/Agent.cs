@@ -18,7 +18,7 @@
         public string PhoneNumber { get; set; } = null!;
 
         public string? WorkingDays { get; set; }
-
+        
         public string? RestDays { get; set; }
 
         public TimeSpan? WorkingHoursStart { get; set; }

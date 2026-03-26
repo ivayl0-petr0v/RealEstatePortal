@@ -5,7 +5,7 @@ namespace RealEstatePortal.Web.Controllers
     using System.Diagnostics;
     using ViewModels;
 
-
+    [AllowAnonymous]
     public class HomeController : BaseController
     {
         public HomeController()
@@ -13,19 +13,16 @@ namespace RealEstatePortal.Web.Controllers
 
         }
 
-        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
         }
 
-        [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();
         }
 
-        [AllowAnonymous]
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

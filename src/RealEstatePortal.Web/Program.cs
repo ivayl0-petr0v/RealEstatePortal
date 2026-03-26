@@ -1,9 +1,13 @@
 namespace RealEstatePortal.Web
 {
     using Data;
+    using Data.Models;
+    using Data.Repository;
+    using Data.Repository.Contracts;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
-    using RealEstatePortal.Data.Models;
+    using RealEstatePortal.Services.Core;
+    using RealEstatePortal.Services.Core.Contracts;
 
     public class Program
     {
@@ -18,6 +22,13 @@ namespace RealEstatePortal.Web
             builder.Services.AddDbContext<RealEstateDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+            //Register repositories
+            builder.Services.AddScoped<IAgentRepository, AgentRepository>();
+            builder.Services.AddScoped<IBaseRepository, BaseRepository>();
+
+            //Register services
+            builder.Services.AddScoped<IAgentService, AgentService>();
 
             builder.Services
                 .AddDefaultIdentity<ApplicationUser>(options =>
