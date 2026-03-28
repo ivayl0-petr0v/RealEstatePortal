@@ -1,16 +1,17 @@
-﻿namespace RealEstatePortal.Services.Core.Contracts
+﻿namespace RealEstatePortal.Services.Core.Contracts;
+
+using System.Threading.Tasks;
+using Web.ViewModels.Agent;
+
+public interface IAgentService
 {
-    using System.Threading.Tasks;
-    using Web.ViewModels.Agent;
+    Task<bool> ExistsByIdAsync(string userId);
 
-    public interface IAgentService
-    {
-        Task<bool> ExistsByIdAsync(string userId);
+    Task<bool> UserWithPhoneNumberExistsAsync(string phoneNumber);
 
-        Task<bool> UserWithPhoneNumberExistsAsync(string phoneNumber);
+    Task<IEnumerable<AllAgentsViewModel>> GetAllAgentsAsync();
 
-        Task<IEnumerable<AllAgentsViewModel>> GetAllAgents();
+    Task CreateAgentAsync(string userId, AgentFormModel model);
 
-        Task CreateAgentAsync(string userId, AgentFormModel model);
-    }
+    Task<AgentDetailsViewModel?> GetAgentDetailsByIdAsync(string id);
 }
