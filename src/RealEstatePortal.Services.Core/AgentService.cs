@@ -129,4 +129,84 @@ public class AgentService : IAgentService
 
         return agentDetails;
     }
+
+    public async Task<AgentFormModel?> GetAgentForEditAsync(string id)
+    {
+        var agent = await baseRepository
+            .AllReadonly<Agent>()
+            .Include(a => a.SpokenLanguages)
+            .ThenInclude(sl => sl.Language)
+            .FirstOrDefaultAsync(a => a.Id.ToString() == id);
+
+        if (agent == null)
+            return null;
+
+        return new AgentFormModel
+        {
+            FullName = agent.FullName,
+            Address = agent.Address,
+            PhoneNumber = agent.PhoneNumber,
+            Description = agent.Description,
+            AvatarUrl = agent.AvatarUrl,
+            FacebookUrl = agent.FacebookUrl,
+            WebsiteUrl = agent.WebsiteUrl,
+            InstagramUrl = agent.InstagramUrl,
+            WorkingHoursStart = agent.WorkingHoursStart,
+            WorkingHoursEnd = agent.WorkingHoursEnd,
+            RestDays = agent.RestDays,
+            WorkingDaysStart = agent.WorkingDays?.Split(" - ").FirstOrDefault(),
+            WorkingDaysEnd = agent.WorkingDays?.Split(" - ").Skip(1).FirstOrDefault(),
+            SpokenLanguages = string.Join(", ", agent.SpokenLanguages.Select(sl => sl.Language.Name))
+        };
+    }
+
+    public async Task EditAgentAsync(string id, AgentFormModel model)
+    {
+        var agent = await baseRepository
+            .All<Agent>()
+            .Include(a => a.SpokenLanguages)
+            .FirstOrDefaultAsync(a => a.Id.ToString() == id);
+
+        if (agent != null)
+        {
+            agent.FullName = model.FullName;
+            agent.PhoneNumber = model.PhoneNumber;
+            agent.Address = model.Address;
+            agent.Description = model.Description;
+            agent.AvatarUrl = model.AvatarUrl ?? "/images/default-avatar.png";
+            agent.FacebookUrl = model.FacebookUrl;
+            agent.WebsiteUrl = model.WebsiteUrl;
+            agent.InstagramUrl = model.InstagramUrl;
+            agent.WorkingHoursStart = model.WorkingHoursStart;
+            agent.WorkingHoursEnd = model.WorkingHoursEnd;
+            agent.WorkingDays = $"{model.WorkingDaysStart} - {model.WorkingDaysEnd}";
+            agent.RestDays = model.RestDays;
+            agent.SpokenLanguages.Clear();
+
+            if (!string.IsNullOrWhiteSpace(model.SpokenLanguages))
+            {
+                var languageNames = model.SpokenLanguages
+                    .Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(l => l.Trim())
+                    .Distinct();
+
+                foreach (var langName in languageNames)
+                {
+                    var existingLanguage = await baseRepository.All<Language>()
+                        .FirstOrDefaultAsync(l => l.Name.ToLower() == langName.ToLower());
+
+                    if (existingLanguage != null)
+                    {
+                        agent.SpokenLanguages.Add(new AgentLanguage { LanguageId = existingLanguage.Id });
+                    }
+                    else
+                    {
+                        agent.SpokenLanguages.Add(new AgentLanguage { Language = new Language { Name = langName } });
+                    }
+                }
+            }
+
+            await baseRepository.SaveChangesAsync();
+        }
+    }
 }

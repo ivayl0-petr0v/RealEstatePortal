@@ -1,17 +1,17 @@
 ﻿@model AgentFormModel
 
 @{
-	ViewData["Title"] = "Become an agent";
+    ViewData["Title"] = "Edit profile";
 }
 
 <div class="container py-5">
     
 	<div class="mb-5">
-		<h1 class="fw-bold mb-2">Become an agent</h1>
+		<h1 class="fw-bold mb-2">Edit profile</h1>
 	</div>
 
-	<form method="post" asp-action="Create" asp-controller="Agent" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
-		<div asp-validation-summary="All"></div>
+	<form method="post" asp-action="Edit" asp-controller="Agent" onsubmit="this.querySelector('button[type=submit]').disabled = true;">
+		<div asp-validation-summary="ModelOnly" class="text-danger mb-4"></div>
 
 		<div class="row g-4">
             
@@ -20,15 +20,19 @@
 				<div class="form-card">
 					<h5>Main info</h5>
                     
-					<div class="input-group-custom">
-						<label class="form-label-custom">Avatar link</label>
-						<input asp-for="AvatarUrl" class="form-control" placeholder="Enter url link" />
-						<span asp-validation-for="AvatarUrl" class="text-danger small"></span>
+					<div class="d-flex align-items-center gap-3 mb-3">
+						<img src="@Model.AvatarUrl" class="rounded object-fit-cover" style="width: 70px; height: 70px;" alt="Profile" onerror="this.src='/images/default-avatar.png'">
+						
+						<div class="input-group-custom mb-0 flex-grow-1">
+							<label class="form-label-custom">Avatar link</label>
+							<input asp-for="AvatarUrl" class="form-control" placeholder="Enter url link" />
+							<span asp-validation-for="AvatarUrl" class="text-danger small"></span>
+						</div>
 					</div>
 
 					<div class="input-group-custom">
 						<label class="form-label-custom">Full name</label>
-						<input asp-for="FullName" class="form-control" placeholder="Full name" />
+						<input asp-for="FullName" class="form-control" placeholder="Enter full name" />
 						<span asp-validation-for="FullName" class="text-danger small"></span>
 					</div>
 
@@ -45,8 +49,8 @@
 					</div>
 				</div>
 
-				<div class="form-card">
-					<h5>Работно време</h5>
+				<div class="form-card mt-4">
+					<h5>Work time</h5>
                     
 					<label class="form-label-custom">Work days</label>
 					<div class="row g-3 mb-3">
@@ -78,12 +82,10 @@
 
 					<div class="row g-3 mb-3">
 						<div class="col-6">
-							<label class="form-label-custom">Beginning</label>
-							<input type="time" asp-for="WorkingHoursStart" class="form-control" value="08:30" />
+							<input type="time" asp-for="WorkingHoursStart" class="form-control" />
 						</div>
 						<div class="col-6">
-							<label class="form-label-custom">End</label>
-							<input type="time" asp-for="WorkingHoursEnd" class="form-control" value="17:00" />
+							<input type="time" asp-for="WorkingHoursEnd" class="form-control" />
 						</div>
 					</div>
 
@@ -100,28 +102,28 @@
 				<div class="form-card">
 					<h5>Description</h5>
 					<div class="input-group-custom mb-0">
-						<textarea asp-for="Description" class="form-control" rows="8" placeholder="Describe yourself"></textarea>
+						<textarea asp-for="Description" class="form-control" rows="11" placeholder="Describe yourself"></textarea>
 						<span asp-validation-for="Description" class="text-danger small"></span>
 					</div>
 				</div>
 
-				<div class="form-card">
+				<div class="form-card mt-4">
 					<h5>Socials</h5>
 					<div class="input-group-custom">
 						<label class="form-label-custom">Facebook</label>
-						<input asp-for="FacebookUrl" class="form-control" />
+						<input asp-for="FacebookUrl" class="form-control" placeholder="link.com" />
 					</div>
 					<div class="input-group-custom">
 						<label class="form-label-custom">Website</label>
-						<input asp-for="WebsiteUrl" class="form-control" />
+						<input asp-for="WebsiteUrl" class="form-control" placeholder="link.com" />
 					</div>
 					<div class="input-group-custom mb-0">
 						<label class="form-label-custom">Instagram</label>
-						<input asp-for="InstagramUrl" class="form-control" />
+						<input asp-for="InstagramUrl" class="form-control" placeholder="link.com" />
 					</div>
 				</div>
 
-				<div class="form-card">
+				<div class="form-card mt-4">
 					<h5>Spoken languages</h5>
 					<div class="input-group-custom mb-0">
 						<input asp-for="SpokenLanguages" class="form-control" placeholder="English, Bulgarian or etc." />
@@ -133,7 +135,7 @@
 		</div>
 
 		<div class="d-flex justify-content-end mt-4 mb-5">
-			<button type="submit" class="btn btn-theme px-5 py-2 fs-5">Register an agent</button>
+			<button type="submit" class="btn btn-theme px-5 py-2 fs-5 rounded-pill">Save changes</button>
 		</div>
 
 	</form>

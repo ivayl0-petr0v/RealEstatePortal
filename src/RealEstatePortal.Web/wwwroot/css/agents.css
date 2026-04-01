@@ -18,11 +18,16 @@
 
 .agent-img-wrapper {
     aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 12px;
     position: relative;
     background-color: #eaeaea;
 }
 
-.agent-link .agent-img {
+.agent-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     transition: transform 0.3s ease;
 }
 

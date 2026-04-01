@@ -37,10 +37,8 @@ public class AgentFormModel
     [StringLength(WorkingDaysMaxLength, ErrorMessage = WorkDaysLengthMessage)]
     public string? WorkingDaysEnd { get; set; }
 
-    //[Range(typeof(TimeSpan), WorkHoursStart, WorkHoursEnd, ErrorMessage = WorkHoursMessage)]
     public TimeSpan? WorkingHoursStart { get; set; }
 
-    //[Range(typeof(TimeSpan), WorkHoursStart, WorkHoursEnd, ErrorMessage = WorkHoursMessage)]
     public TimeSpan? WorkingHoursEnd { get; set; }
 
     [StringLength(RestDaysMaxLength, ErrorMessage = RestDaysLengthMessage)]

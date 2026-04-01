@@ -92,4 +92,47 @@ public class AgentController : BaseController
 
         return View(agentDetailsModel);
     }
+
+    [HttpGet]
+    public async Task<IActionResult> Edit(string id)
+    {
+        string? userId = GetCurrentUserId();
+      
+        AgentFormModel? model = await agentService.GetAgentForEditAsync(id);
+
+        if (model == null)
+        {
+            return NotFound();
+        }
+
+        return View(model);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Edit(string id, AgentFormModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        try
+        {
+            await agentService.EditAgentAsync(id, model);
+            TempData["SuccessMessage"] = AgentEditedSuccessfullyMessage;
+            return RedirectToAction(nameof(Details), new { id });
+        }
+        catch (DbEntityEditFailureException e)
+        {
+            logger.LogError(e, EditAgentFailureMessage, id);
+            ModelState.AddModelError(string.Empty, EditAgentFailureMessage);
+            return View(model);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, UnexpectedErrorMessage);
+            ModelState.AddModelError(string.Empty, UnexpectedErrorMessage);
+            return View(model);
+        }
+    }
 }

@@ -43,6 +43,10 @@
             public const string AgentPhoneNumberExistsMessage = "The phone number is already in use by another agent.";
 
             public const string AgentCreatedSuccessfullyMessage = "You have successfully become an agent.";
+
+            public const string AgentEditedSuccessfullyMessage = "Agent's profile updated successfully!";
+
+            public const string EditAgentFailureMessage = "Error while editing agent {0}";
         }
     }
 }
