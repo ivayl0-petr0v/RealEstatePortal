@@ -19,6 +19,9 @@
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder
+                .HasQueryFilter(re => re.IsDeleted == false && re.Agent.IsDeleted == false);
+
+            builder
                 .HasOne(re => re.City)
                 .WithMany(city => city.RealEstates)
                 .HasForeignKey(re => re.CityId)

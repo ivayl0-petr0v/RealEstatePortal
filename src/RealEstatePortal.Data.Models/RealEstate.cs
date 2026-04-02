@@ -38,7 +38,7 @@
 
         public Status Status { get; set; }
 
-        // TODO: Add IsDeleted property for soft delete
+        public bool IsDeleted { get; set; } = false;
 
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; } = null!;

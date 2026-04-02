@@ -42,6 +42,9 @@
                 .Property(i => i.Message)
                 .IsRequired()
                 .HasMaxLength(MessageMaxLength);
+
+            builder
+                .HasQueryFilter(i => i.RealEstate.IsDeleted == false);
         }
     }
 }

@@ -21,6 +21,9 @@
                 .WithMany(re => re.FavoriteRealEstates)
                 .HasForeignKey(uf => uf.RealEstateId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .HasQueryFilter(uf => uf.RealEstate.IsDeleted == false);
         }
     }
 }

@@ -19,6 +19,9 @@
                 .Property(i => i.ImageUrl)
                 .IsRequired()
                 .HasMaxLength(ImageUrlMaxLength);
+
+            builder
+                .HasQueryFilter(i => i.RealEstate.IsDeleted == false);
         }
     }
 }

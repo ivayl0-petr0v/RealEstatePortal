@@ -22,6 +22,9 @@
                 .WithMany(f => f.RealEstateFeatures)
                 .HasForeignKey(rf => rf.FeatureId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .HasQueryFilter(rf => rf.RealEstate.IsDeleted == false);
         }
     }
 }

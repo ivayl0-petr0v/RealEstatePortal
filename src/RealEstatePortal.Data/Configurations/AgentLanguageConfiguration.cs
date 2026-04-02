@@ -22,6 +22,9 @@
                 .WithMany(l => l.AgentLanguages)
                 .HasForeignKey(al => al.LanguageId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .HasQueryFilter(al => al.Agent.IsDeleted == false);
         }
     }
 }
