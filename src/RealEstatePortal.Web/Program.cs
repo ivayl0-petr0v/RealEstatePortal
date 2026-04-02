@@ -1,93 +1,92 @@
-namespace RealEstatePortal.Web
+namespace RealEstatePortal.Web;
+
+using Data;
+using Data.Models;
+using Data.Repository;
+using Data.Repository.Contracts;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using RealEstatePortal.Services.Core;
+using RealEstatePortal.Services.Core.Contracts;
+
+public class Program
 {
-    using Data;
-    using Data.Models;
-    using Data.Repository;
-    using Data.Repository.Contracts;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.EntityFrameworkCore;
-    using RealEstatePortal.Services.Core;
-    using RealEstatePortal.Services.Core.Contracts;
-
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+        WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            string connectionString = builder.Configuration
-                .GetConnectionString("SqlServerDev") ?? throw new InvalidOperationException("Connection string 'SqlServerDev' not found.");
+        // Add services to the container.
+        string connectionString = builder.Configuration
+            .GetConnectionString("SqlServerDev") ?? throw new InvalidOperationException("Connection string 'SqlServerDev' not found.");
 
-            builder.Services.AddDbContext<RealEstateDbContext>(options =>
-                options.UseSqlServer(connectionString));
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+        builder.Services.AddDbContext<RealEstateDbContext>(options =>
+            options.UseSqlServer(connectionString));
+        builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            //Register repositories
-            builder.Services.AddScoped<IAgentRepository, AgentRepository>();
-            builder.Services.AddScoped<IBaseRepository, BaseRepository>();
+        //Register repositories
+        builder.Services.AddScoped<IAgentRepository, AgentRepository>();
+        builder.Services.AddScoped<IBaseRepository, BaseRepository>();
 
-            //Register services
-            builder.Services.AddScoped<IAgentService, AgentService>();
+        //Register services
+        builder.Services.AddScoped<IAgentService, AgentService>();
 
-            builder.Services
-                .AddDefaultIdentity<ApplicationUser>(options =>
-                {
-                    ConfigureIdentity(builder.Configuration, options);
-                }).AddEntityFrameworkStores<RealEstateDbContext>();
-
-            builder.Services.AddControllersWithViews();
-
-            WebApplication app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+        builder.Services
+            .AddDefaultIdentity<ApplicationUser>(options =>
             {
-                app.UseMigrationsEndPoint();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+                ConfigureIdentity(builder.Configuration, options);
+            }).AddEntityFrameworkStores<RealEstateDbContext>();
 
-            app.UseHttpsRedirection();
-            app.UseStaticFiles();
+        builder.Services.AddControllersWithViews();
 
-            app.UseRouting();
+        WebApplication app = builder.Build();
 
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-            app.MapRazorPages();
-
-            app.Run();
-        }
-        private static void ConfigureIdentity(ConfigurationManager configuration, IdentityOptions options)
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
         {
-            options.SignIn.RequireConfirmedAccount = configuration
-                .GetValue<bool>("Identity:SignIn:RequireConfirmedAccount");
-            options.SignIn.RequireConfirmedEmail = configuration
-                .GetValue<bool>("Identity:SignIn:RequireConfirmedEmail");
-            options.SignIn.RequireConfirmedPhoneNumber = configuration
-                .GetValue<bool>("Identity:SignIn:RequireConfirmedPhoneNumber");
-
-            options.Password.RequireDigit = configuration
-                .GetValue<bool>("Identity:Password:RequireDigit");
-            options.Password.RequiredLength = configuration
-                .GetValue<int>("Identity:Password:RequiredLength");
-            options.Password.RequiredUniqueChars = configuration
-                .GetValue<int>("Identity:Password:RequiredUniqueChars");
-            options.Password.RequireNonAlphanumeric = configuration
-                .GetValue<bool>("Identity:Password:RequireNonAlphanumeric");
-            options.Password.RequireUppercase = configuration
-                .GetValue<bool>("Identity:Password:RequireUppercase");
-            options.Password.RequireLowercase = configuration
-                .GetValue<bool>("Identity:Password:RequireLowercase");
+            app.UseMigrationsEndPoint();
         }
+        else
+        {
+            app.UseExceptionHandler("/Home/Error");
+            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+            app.UseHsts();
+        }
+
+        app.UseHttpsRedirection();
+        app.UseStaticFiles();
+
+        app.UseRouting();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.MapControllerRoute(
+            name: "default",
+            pattern: "{controller=Home}/{action=Index}/{id?}");
+        app.MapRazorPages();
+
+        app.Run();
+    }
+    private static void ConfigureIdentity(ConfigurationManager configuration, IdentityOptions options)
+    {
+        options.SignIn.RequireConfirmedAccount = configuration
+            .GetValue<bool>("Identity:SignIn:RequireConfirmedAccount");
+        options.SignIn.RequireConfirmedEmail = configuration
+            .GetValue<bool>("Identity:SignIn:RequireConfirmedEmail");
+        options.SignIn.RequireConfirmedPhoneNumber = configuration
+            .GetValue<bool>("Identity:SignIn:RequireConfirmedPhoneNumber");
+
+        options.Password.RequireDigit = configuration
+            .GetValue<bool>("Identity:Password:RequireDigit");
+        options.Password.RequiredLength = configuration
+            .GetValue<int>("Identity:Password:RequiredLength");
+        options.Password.RequiredUniqueChars = configuration
+            .GetValue<int>("Identity:Password:RequiredUniqueChars");
+        options.Password.RequireNonAlphanumeric = configuration
+            .GetValue<bool>("Identity:Password:RequireNonAlphanumeric");
+        options.Password.RequireUppercase = configuration
+            .GetValue<bool>("Identity:Password:RequireUppercase");
+        options.Password.RequireLowercase = configuration
+            .GetValue<bool>("Identity:Password:RequireLowercase");
     }
 }

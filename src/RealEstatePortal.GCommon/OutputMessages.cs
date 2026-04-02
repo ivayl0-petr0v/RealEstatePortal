@@ -47,6 +47,14 @@
             public const string AgentEditedSuccessfullyMessage = "Agent's profile updated successfully!";
 
             public const string EditAgentFailureMessage = "Error while editing agent {0}";
+
+            public const string DeleteAgentFailureMessage = "Error while editing agent {0}";
+
+            public const string AgentDeletedSuccessfullyMessage = "Your agent's profile deleted successfully";
+
+            public const string DeleteAgentMissingPermission = "You don't have permission to delete this agent";
+            
+            public const string EditAgentMissingPermission = "You don't have permission to edit this agent";
         }
     }
 }

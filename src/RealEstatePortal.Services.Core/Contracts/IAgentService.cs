@@ -18,4 +18,10 @@ public interface IAgentService
     Task<AgentFormModel?> GetAgentForEditAsync(string id);
 
     Task EditAgentAsync(string id, AgentFormModel model);
+
+    Task<AgentDeleteViewModel?> GetAgentForDeleteByIdAsync(string id);
+
+    Task DeleteAgentAsync(string id);
+
+    Task<string?> GetAgentUserIdAsync(string agentId);
 }

@@ -4,6 +4,8 @@ public class AgentDetailsViewModel
 {
     public string Id { get; set; } = null!;
 
+    public string UserId { get; set; } = null!;
+
     public string FullName { get; set; } = null!;
 
     public string AvatarUrl { get; set; } = null!;

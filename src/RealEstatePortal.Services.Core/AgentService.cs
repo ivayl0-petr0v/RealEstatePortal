@@ -90,7 +90,7 @@ public class AgentService : IAgentService
         bool successAdd = await baseRepository.AddAsync(agent);
         if (!successAdd)
         {
-            throw new DbEntityCreateFailureException();
+            throw new AgentCreateFailureException();
         }
     }
 
@@ -107,6 +107,7 @@ public class AgentService : IAgentService
             .Select(a => new AgentDetailsViewModel
             {
                 Id = a.Id.ToString(),
+                UserId = a.UserId,
                 FullName = a.FullName,
                 AvatarUrl = a.AvatarUrl ?? "/images/default-avatar.png",
                 Address = a.Address,
@@ -208,5 +209,43 @@ public class AgentService : IAgentService
 
             await baseRepository.SaveChangesAsync();
         }
+    }
+
+    public async Task<AgentDeleteViewModel?> GetAgentForDeleteByIdAsync(string id)
+    {
+        return await baseRepository
+            .AllReadonly<Agent>()
+            .Where(a => a.Id.ToString() == id)
+            .Select(a => new AgentDeleteViewModel
+            {
+                Id = a.Id.ToString(),
+                FullName = a.FullName,
+                AvatarUrl = a.AvatarUrl ?? "/images/default-avatar.png"
+
+            })
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task DeleteAgentAsync(string id)
+    {
+        var agent = await baseRepository
+            .All<Agent>()
+            .FirstOrDefaultAsync(a => a.Id.ToString() == id);
+
+        if (agent != null)
+        {
+            agent.IsDeleted = true;
+
+            await baseRepository.SaveChangesAsync();
+        }
+    }
+
+    public async Task<string?> GetAgentUserIdAsync(string agentId)
+    {
+        return await baseRepository
+            .AllReadonly<Agent>()
+            .Where(a => a.Id.ToString() == agentId)
+            .Select(a => a.UserId)
+            .FirstOrDefaultAsync();
     }
 }
