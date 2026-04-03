@@ -124,4 +124,42 @@ public class RealEstateService : IRealEstateService
 
         return realEstate.Id.ToString();
     }
+
+    public async Task<RealEstateDetailsViewModel?> GetDetailsByIdAsync(string id)
+    {
+        bool isValidGuid = Guid.TryParse(id, out Guid realEstateGuid);
+        if (!isValidGuid) return null;
+
+        return await baseRepository
+            .AllReadonly<RealEstate>()
+            .Where(re => re.Id == realEstateGuid && re.IsDeleted == false)
+            .Select(re => new RealEstateDetailsViewModel
+            {
+                Id = re.Id.ToString(),
+                Title = $"{re.Category.Name} in {re.City.Name}",
+                Address = re.Address,
+                Price = re.Price,
+                Area = re.Area,
+                TransactionType = re.TransactionType.ToString(),
+                Description = re.Description,
+                RoomsCount = re.RoomsCount,
+                BedroomsCount = re.BedroomsCount,
+                BathroomsCount = re.BathroomsCount,
+                ConstructionType = re.ConstructionType,
+                ConstructionYear = re.ConstructionYear,
+                CompletionStatus = re.CompletionStatus,
+                Furnishing = re.Furnishing,
+                TotalFloors = re.TotalFloors,
+                RealEstateFloor = re.RealEstateFloor,
+                Exposure = re.Exposure,
+                ImageUrls = re.RealEstateImages.Select(img => img.ImageUrl).ToList(),
+                Features = re.RealEstateFeatures.Select(f => f.Feature.Name).ToList(),
+                AgentId = re.AgentId.ToString(),
+                AgentName = re.Agent.FullName,
+                AgentPhoneNumber = re.Agent.PhoneNumber,
+                AgentEmail = re.Agent.User.Email,
+                AgentAvatarUrl = re.Agent.AvatarUrl
+            })
+            .FirstOrDefaultAsync();
+    }
 }

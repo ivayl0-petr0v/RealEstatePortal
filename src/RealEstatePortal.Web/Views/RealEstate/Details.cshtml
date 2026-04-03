@@ -1,0 +1,219 @@
+﻿@model RealEstateDetailsViewModel
+
+@{
+	ViewData["Title"] = Model.Title;
+}
+
+<div class="container py-4">
+
+	<div class="d-flex justify-content-end mb-3">
+		<div class="bg-white rounded-pill px-3 py-2 shadow-sm d-flex gap-2 border">
+			@if (Model.IsOwner)
+			{
+				<div class="dropdown">
+					<button class="btn btn-sm btn-light rounded-circle border-0" type="button" data-bs-toggle="dropdown">
+						<i class="bi bi-three-dots fs-5"></i>
+					</button>
+					<ul class="dropdown-menu dropdown-menu-end shadow border-0">
+						<li><a class="dropdown-item" asp-action="Edit" asp-route-id="@Model.Id"><i class="bi bi-pencil me-2"></i> Edit</a></li>
+						<li><hr class="dropdown-divider"></li>
+						<li><a class="dropdown-item text-danger" asp-action="Delete" asp-route-id="@Model.Id"><i class="bi bi-trash me-2"></i> Delete</a></li>
+					</ul>
+				</div>
+			}
+			else
+			{
+				<button class="btn btn-sm btn-light text-danger rounded-circle border-0" title="Add to favorites">
+					<i class="bi bi-heart fs-5"></i>
+				</button>
+			}
+		</div>
+	</div>
+
+	@{
+		var images = Model.ImageUrls.ToList();
+	}
+	<div class="property-gallery">
+		@if (images.Any())
+		{
+			<img src="@images[0]" class="gallery-item gallery-main" alt="Main image" onclick="openGallery(0)">
+            
+			@for (int i = 1; i < Math.Min(images.Count, 4); i++)
+			{
+				<img src="@images[i]" class="gallery-item" alt="Property image" onclick="openGallery(@i)">
+			}
+
+			@if (images.Count > 4)
+			{
+				<div class="gallery-more" onclick="openGallery(4)">
+					More Images (+@(images.Count - 4))
+				</div>
+			}
+			else if (images.Count == 4)
+			{
+				<img src="@images[3]" class="gallery-item" alt="Property image" onclick="openGallery(3)">
+			}
+		}
+		else
+		{
+			<div class="gallery-item gallery-main bg-secondary d-flex align-items-center justify-content-center text-white">
+				No images uploaded
+			</div>
+		}
+	</div>
+
+	<div class="row g-4">
+        
+		<div class="col-lg-8">
+            
+			<div class="form-card">
+				<h1 class="fw-bold mb-3" style="color: #009688;">@Model.Price.ToString("N0") €</h1>
+                
+				<div class="d-flex flex-wrap gap-4 text-muted mb-3">
+					<span class="d-flex align-items-center"><i class="bi bi-house me-2 fs-5"></i> @Model.Title</span>
+					<span class="d-flex align-items-center"><i class="bi bi-arrows-fullscreen me-2 fs-5"></i> @Model.Area m²</span>
+					<span class="d-flex align-items-center"><i class="bi bi-geo-alt me-2 fs-5"></i> @Model.Address</span>
+				</div>
+
+				<div class="d-flex flex-wrap gap-4 text-muted border-top pt-3">
+					<span class="d-flex align-items-center"><i class="bi bi-door-open me-2 fs-5"></i> @Model.RoomsCount rooms</span>
+					<span class="d-flex align-items-center"><i class="bi bi-bed me-2 fs-5"></i> @Model.BedroomsCount beds</span>
+					<span class="d-flex align-items-center"><i class="bi bi-droplet me-2 fs-5"></i> @Model.BathroomsCount baths</span>
+				</div>
+			</div>
+
+			<div class="form-card">
+				<h5 class="mb-4">Facts and Details</h5>
+				<div class="row g-4">
+					<div class="col-md-6">
+						<small class="text-muted d-block">Construction Type</small>
+						<span class="fw-medium">@Model.ConstructionType</span>
+					</div>
+					<div class="col-md-6">
+						<small class="text-muted d-block">Construction Year</small>
+						<span class="fw-medium">@Model.ConstructionYear</span>
+					</div>
+					<div class="col-md-6">
+						<small class="text-muted d-block">Completion Status</small>
+						<span class="fw-medium">@Model.CompletionStatus</span>
+					</div>
+					<div class="col-md-6">
+						<small class="text-muted d-block">Furnishing</small>
+						<span class="fw-medium">@(string.IsNullOrEmpty(Model.Furnishing) ? "Not specified" : Model.Furnishing)</span>
+					</div>
+					<div class="col-md-6">
+						<small class="text-muted d-block">Total Floors / Property Floor</small>
+						<span class="fw-medium">@Model.TotalFloors / @Model.RealEstateFloor</span>
+					</div>
+					<div class="col-md-6">
+						<small class="text-muted d-block">Exposure</small>
+						<span class="fw-medium">@(string.IsNullOrEmpty(Model.Exposure) ? "Not specified" : Model.Exposure)</span>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-card">
+				<h5 class="mb-3">Property Description</h5>
+				<p class="text-muted mb-0" style="line-height: 1.6; text-align: justify; white-space: pre-line;">
+					@Model.Description
+				</p>
+			</div>
+		</div>
+
+		<div class="col-lg-4 d-flex flex-column gap-4">
+            
+			<div class="form-card">
+				<h5 class="mb-4">Seller's Agent</h5>
+				<div class="d-flex align-items-center gap-3 mb-3">
+					<img src="@Model.AgentAvatarUrl" class="rounded-circle object-fit-cover shadow-sm" style="width: 60px; height: 60px;" alt="@Model.AgentName" onerror="this.src='/images/default-avatar.png'">
+					<div>
+						<h6 class="fw-bold mb-1">@Model.AgentName</h6>
+						<a asp-controller="Agent" asp-action="Details" asp-route-id="@Model.AgentId" class="text-decoration-none small text-muted hover-teal">
+							View Profile
+						</a>
+					</div>
+				</div>
+                
+				<div class="d-flex flex-column gap-2 text-muted small">
+					<span><i class="bi bi-telephone text-dark me-2"></i> @Model.AgentPhoneNumber</span>
+					@if (!string.IsNullOrEmpty(Model.AgentEmail))
+					{
+						<span><i class="bi bi-envelope text-dark me-2"></i> @Model.AgentEmail</span>
+					}
+				</div>
+                
+				<a href="tel:@Model.AgentPhoneNumber" class="btn btn-outline-theme w-100 mt-4 d-flex align-items-center justify-content-center gap-2">
+					<i class="bi bi-telephone-fill"></i> Call Now
+				</a>
+			</div>
+
+			<div class="form-card">
+				<h5 class="mb-4">Amenities</h5>
+				<ul class="list-unstyled d-flex flex-column gap-2 mb-0">
+					@if (Model.Features.Any())
+					{
+						@foreach (var feature in Model.Features)
+						{
+							<li class="d-flex align-items-center text-muted">
+								<i class="bi bi-check2 text-success me-2 fs-5"></i> @feature
+							</li>
+						}
+					}
+					else
+					{
+						<li class="text-muted font-italic">No amenities specified.</li>
+					}
+				</ul>
+			</div>
+		</div>
+        
+	</div>
+</div>
+
+<div class="modal fade" id="imageGalleryModal" tabindex="-1" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered modal-xl">
+		<div class="modal-content bg-transparent border-0">
+			<div class="modal-header border-0 justify-content-end pb-0 position-absolute top-0 end-0 z-3">
+				<button type="button" class="btn-close btn-close-white bg-dark m-2 fs-5 p-2 rounded-circle shadow" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+            
+			<div class="modal-body p-0 text-center">
+				<div id="galleryCarousel" class="carousel slide" data-bs-ride="false">
+					<div class="carousel-inner rounded-4 shadow-lg bg-dark">
+						@for (int i = 0; i < images.Count; i++)
+						{
+							<div class="carousel-item @(i == 0 ? "active" : "")">
+								<img src="@images[i]" class="img-fluid" style="max-height: 85vh; object-fit: contain;" alt="Gallery image @(i + 1)">
+							</div>
+						}
+					</div>
+                    
+					@if (images.Count > 1)
+					{
+						<button class="carousel-control-prev" type="button" data-bs-target="#galleryCarousel" data-bs-slide="prev">
+							<span class="carousel-control-prev-icon p-3 bg-dark rounded-circle" aria-hidden="true"></span>
+							<span class="visually-hidden">Previous</span>
+						</button>
+						<button class="carousel-control-next" type="button" data-bs-target="#galleryCarousel" data-bs-slide="next">
+							<span class="carousel-control-next-icon p-3 bg-dark rounded-circle" aria-hidden="true"></span>
+							<span class="visually-hidden">Next</span>
+						</button>
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script>
+		function openGallery(index) {
+			var carouselElement = document.getElementById('galleryCarousel');
+			var carousel = bootstrap.Carousel.getOrCreateInstance(carouselElement);
+			carousel.to(index);
+            
+			var myModal = new bootstrap.Modal(document.getElementById('imageGalleryModal'));
+			myModal.show();
+		}
+	</script>
+}

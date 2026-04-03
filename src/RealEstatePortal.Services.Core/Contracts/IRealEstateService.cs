@@ -11,5 +11,7 @@ public interface IRealEstateService
 
     Task<IEnumerable<FeatureCheckboxViewModel>> GetAllFeaturesAsync();
 
-    Task<string> CreateRealEstateAsync(RealEstateFormModel model, string agentId, string imageFolderPath); 
+    Task<string> CreateRealEstateAsync(RealEstateFormModel model, string agentId, string imageFolderPath);
+
+    Task<RealEstateDetailsViewModel?> GetDetailsByIdAsync(string id);
 }

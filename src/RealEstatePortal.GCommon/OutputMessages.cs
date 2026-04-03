@@ -95,6 +95,7 @@ public static class OutputMessages
         public const string UserWithoutAgentProfile = "You must be a registered agent to post a property listing.";
         public const string RealEstateCreatedSuccessfullyMessage = "Property listing created successfully.";
         public const string CreateRealEstateFailureMessage = "An error occurred while creating the property listing. Please try again.";
+        public const string RealEstateNotFoundMessage = "Property not found.";
 
     }
 }

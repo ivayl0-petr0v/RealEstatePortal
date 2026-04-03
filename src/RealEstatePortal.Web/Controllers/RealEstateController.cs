@@ -105,4 +105,29 @@ public class RealEstateController : BaseController
             return View(formModel);
         }
     }
+
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<IActionResult> Details(string id)
+    {
+        var model = await realEstateService
+            .GetDetailsByIdAsync(id);
+
+        if (model == null)
+        {
+            TempData["ErrorMessage"] = RealEstateNotFoundMessage;
+            return RedirectToAction("Index", "RealEstate");
+        }
+
+        if (User.Identity?.IsAuthenticated == true)
+        {
+            string currentUserId = GetCurrentUserId()!;
+            string? currentAgentId = await agentService
+                .GetAgentIdByUserIdAsync(currentUserId);
+
+            model.IsOwner = (currentAgentId == model.AgentId);
+        }
+
+        return View(model);
+    }
 }
