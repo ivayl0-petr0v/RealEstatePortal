@@ -102,11 +102,24 @@ h1, h2, h3, h4, h5, h6 {
 /* 4. Cards and hover effects */
 .agent-card, .property-card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 16px;
 }
 
 .agent-card:hover, .property-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
+}
+
+.heart-btn {
+    transition: all 0.2s ease;
+}
+
+.heart-btn:hover {
+    background-color: #ffeff0 !important;
+}
+
+.heart-btn:hover i {
+    color: #dc3545 !important;
 }
 
 /* 5. UI components */

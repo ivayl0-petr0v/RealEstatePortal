@@ -18,6 +18,29 @@ public class RealEstateService : IRealEstateService
         this.baseRepository = baseRepository;
     }
 
+    public async Task<IEnumerable<AllRealEstatesViewModel>> GetAllRealEstatesAsync()
+    {
+        var allRealEstates = await baseRepository
+            .AllReadonly<RealEstate>()
+            .Where(re => re.IsDeleted == false)
+            .OrderByDescending(re => re.Id)
+            .Select(re => new AllRealEstatesViewModel
+            {
+                Id = re.Id.ToString(),
+                ImageUrl = re.RealEstateImages.Select(img => img.ImageUrl).FirstOrDefault() ?? "/images/default-property.jpg",
+                Price = re.Price,
+                Title = re.Category.Name,
+                Area = re.Area,
+                Address = $"{re.City.Name}, {re.Address}",
+                RoomsCount = re.RoomsCount,
+                BedroomsCount = re.BedroomsCount,
+                BathroomsCount = re.BathroomsCount
+            })
+            .ToArrayAsync();
+
+        return allRealEstates;
+    }
+
     public async Task<IEnumerable<SelectListItemViewModel>> GetAllCategoriesAsync()
     {
         return await baseRepository

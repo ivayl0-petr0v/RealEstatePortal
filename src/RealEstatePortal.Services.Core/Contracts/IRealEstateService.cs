@@ -5,6 +5,8 @@ using RealEstatePortal.Web.ViewModels.RealEstate.Common;
 
 public interface IRealEstateService
 {
+    Task<IEnumerable<AllRealEstatesViewModel>> GetAllRealEstatesAsync();
+
     Task<IEnumerable<SelectListItemViewModel>> GetAllCategoriesAsync();
 
     Task<IEnumerable<SelectListItemViewModel>> GetAllCitiesAsync();
