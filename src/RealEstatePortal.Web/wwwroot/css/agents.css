@@ -1,22 +1,4 @@
-﻿.agent-card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.agent-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
-}
-
-.pagination-circle {
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-}
-
-.agent-img-wrapper {
+﻿.agent-img-wrapper {
     aspect-ratio: 1 / 1;
     overflow: hidden;
     border-radius: 12px;
@@ -36,6 +18,6 @@
 }
 
 .agent-link:hover .text-dark {
-    color: #009688 !important;
+    color: #008C72 !important;
     transition: color 0.2s ease;
 }

@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using RealEstatePortal.GCommon.Exceptions;
 using RealEstatePortal.Services.Core.Contracts;
 using RealEstatePortal.Web.ViewModels.Agent;
-using System.Runtime.CompilerServices;
 using static GCommon.ApplicationConstants;
 using static GCommon.OutputMessages.Agent;
 
@@ -60,6 +59,8 @@ public class AgentController : BaseController
         {
             await agentService.CreateAgentAsync(userId, formModel);
             TempData["SuccessMessage"] = AgentCreatedSuccessfullyMessage;
+
+            return RedirectToAction(nameof(Details), new { id = userId });
         }
         catch (AgentCreateFailureException e)
         {
@@ -75,8 +76,6 @@ public class AgentController : BaseController
 
             return View(formModel);
         }
-
-        return RedirectToAction(nameof(Details), new { id = userId });
     }
 
     [HttpGet]

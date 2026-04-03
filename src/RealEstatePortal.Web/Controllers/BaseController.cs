@@ -1,13 +1,12 @@
-﻿namespace RealEstatePortal.Web.Controllers
-{
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Mvc;
-    using System.Security.Claims;
+﻿namespace RealEstatePortal.Web.Controllers;
 
-    [Authorize]
-    public class BaseController : Controller
-    {
-        protected string? GetCurrentUserId()
-            => User?.FindFirstValue(ClaimTypes.NameIdentifier);
-    }
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+
+[Authorize]
+public class BaseController : Controller
+{
+    protected string? GetCurrentUserId()
+        => User?.FindFirstValue(ClaimTypes.NameIdentifier);
 }

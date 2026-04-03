@@ -248,4 +248,13 @@ public class AgentService : IAgentService
             .Select(a => a.UserId)
             .FirstOrDefaultAsync();
     }
+
+    public async Task<string?> GetAgentIdByUserIdAsync(string userId)
+    {
+        return await baseRepository
+            .AllReadonly<Agent>()
+            .Where(a => a.UserId == userId && a.IsDeleted == false)
+            .Select(a => a.Id.ToString())
+            .FirstOrDefaultAsync();
+    }
 }

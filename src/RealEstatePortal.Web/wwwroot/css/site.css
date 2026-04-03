@@ -1,5 +1,8 @@
+/* 1. Base styles  */
 html {
     font-size: 14px;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
@@ -18,21 +21,148 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
-.btn-teal {
-    background-color: #009688;
+/* 2. Buttons */
+.btn-teal, .btn-theme {
+    background-color: #008C72;
     color: white;
+    border-radius: 50px;
+    padding: 10px 30px;
+    font-weight: 500;
+    transition: all 0.3s ease;
 }
 
-.btn-teal:hover {
+.btn-teal:hover, .btn-theme:hover {
     background-color: #007d71;
     color: white;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.btn-outline-theme {
+    color: #008C72;
+    border: 1px solid #008C72;
+    border-radius: 50px;
+    padding: 8px 24px;
+    background: transparent;
+    transition: all 0.3s ease;
 }
 
-html {
-    position: relative;
-    min-height: 100%;
+.btn-outline-theme:hover {
+    background-color: #008C72;
+    color: white;
+}
+
+.btn-outline-dark:hover {
+    background-color: #343a40;
+    color: #ffffff;
+}
+
+/* 3. Forms and fieldsc */
+.form-card, .edit-card {
+    background: #ffffff;
+    border-radius: 16px;
+    border: none;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.form-card h5, .edit-card h5, .edit-page-title {
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-control, .form-select {
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    padding: 10px 16px;
+    box-shadow: none;
+}
+
+.form-control:focus, .form-select:focus, .btn:focus, .btn-link.nav-link:focus, .form-check-input:focus {
+    border-color: #008C72;
+    box-shadow: 0 0 0 0.2rem rgba(0, 150, 136, 0.25);
+}
+
+.form-label-custom {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.input-group-custom {
+    margin-bottom: 16px;
+}
+
+.icon-group {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da !important;
+}
+
+/* 4. Cards and hover effects */
+.agent-card, .property-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.agent-card:hover, .property-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important;
+}
+
+/* 5. UI components */
+.pagination-circle {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.social-link:hover {
+    color: #008C72 !important;
+    transition: color 0.2s ease;
+}
+
+.avatar-upload-box {
+    width: 60px;
+    height: 60px;
+    background-color: #f1f3f5;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #6c757d;
+}
+
+/* 6. Real Estate gallery */
+.gallery-upload-box {
+    border: 2px dashed #d1d5db;
+    border-radius: 12px;
+    padding: 60px 20px;
+    text-align: center;
+    background-color: #f9fafb;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.gallery-upload-box:hover {
+    background-color: #f3f4f6;
+    border-color: #009688; /* Променено на твоя основен цвят */
+}
+
+.gallery-preview {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+}
+
+.gallery-preview img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #eaeaea;
 }

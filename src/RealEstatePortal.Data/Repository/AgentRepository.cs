@@ -14,7 +14,8 @@ public class AgentRepository : BaseRepository, IAgentRepository
 
     public async Task<bool> ExistsByIdAsync(string userId)
     {
-        return await AllReadonly<Agent>().AnyAsync(a => a.UserId == userId);
+        return await AllReadonly<Agent>()
+            .AnyAsync(a => a.UserId == userId == a.IsDeleted == false);
     }
 
     public async Task<bool> UserWithPhoneNumberExistsAsync(string phoneNumber)

@@ -8,7 +8,7 @@
 	<div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
 		<div class="d-flex align-items-center gap-3">
 			<h2 class="mb-0 fw-bold">Agents</h2>
-			<a asp-controller="Agent" asp-action="Create" class="btn btn-teal rounded-pill px-4 text-white">
+			<a asp-controller="Agent" asp-action="Create" class="btn btn-theme">
 				Create an agent
 			</a>
 		</div>
@@ -27,16 +27,16 @@
 		{
 			<div class="col">
 				<a asp-controller="Agent" asp-action="Details" asp-route-id="@agent.Id" class="text-decoration-none agent-link">
-					<div class="d-flex flex-column h-100">
+					<div class="d-flex flex-column h-100 agent-card bg-white p-2 rounded-4 border-0">
                     
-						<div class="agent-img-wrapper mb-3 overflow-hidden rounded-4">
+						<div class="agent-img-wrapper mb-3 overflow-hidden rounded-3">
 							<img src="@agent.AvatarUrl"
 								 class="w-100 h-100 object-fit-cover agent-img"
 								 alt="Image of @agent.FullName"
 								 onerror="this.src='/images/default-avatar.png'">
 						</div>
                     
-						<div class="agent-info d-flex flex-column flex-grow-1 px-1">
+						<div class="agent-info d-flex flex-column flex-grow-1 px-2 pb-2">
 							<h6 class="fw-bold mb-2 text-dark" style="font-size: 0.95rem; line-height: 1.3;">
 								@agent.FullName
 							</h6>

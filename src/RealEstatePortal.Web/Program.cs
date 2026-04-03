@@ -29,6 +29,7 @@ public class Program
 
         //Register services
         builder.Services.AddScoped<IAgentService, AgentService>();
+        builder.Services.AddScoped<IRealEstateService, RealEstateService>();
 
         builder.Services
             .AddDefaultIdentity<ApplicationUser>(options =>

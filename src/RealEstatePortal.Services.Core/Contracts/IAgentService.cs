@@ -24,4 +24,6 @@ public interface IAgentService
     Task DeleteAgentAsync(string id);
 
     Task<string?> GetAgentUserIdAsync(string agentId);
+
+    Task<string?> GetAgentIdByUserIdAsync(string userId);
 }

@@ -1,12 +1,11 @@
-﻿namespace RealEstatePortal.Data.Models
+﻿namespace RealEstatePortal.Data.Models;
+
+public class Category
 {
-    public class Category
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        public string Name { get; set; } = null!;
+    public string Name { get; set; } = null!;
 
-        public virtual ICollection<RealEstate> RealEstates { get; set; }
-            = new HashSet<RealEstate>();
-    }
+    public virtual ICollection<RealEstate> RealEstates { get; set; }
+        = new HashSet<RealEstate>();
 }

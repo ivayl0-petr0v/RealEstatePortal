@@ -10,6 +10,7 @@
             : base(message)
         {
         }
+
         public AgentCreateFailureException(string message, Exception innerException)
             : base(message, innerException)
         {

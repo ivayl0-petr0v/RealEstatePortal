@@ -28,4 +28,8 @@
     <ProjectReference Include="..\RealEstatePortal.Web.ViewModels\RealEstatePortal.Web.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\real-estates\" />
+  </ItemGroup>
+
 </Project>
