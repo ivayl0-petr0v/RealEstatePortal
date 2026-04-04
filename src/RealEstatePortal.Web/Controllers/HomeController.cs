@@ -2,20 +2,32 @@ namespace RealEstatePortal.Web.Controllers;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RealEstatePortal.Services.Core.Contracts;
+using RealEstatePortal.Web.ViewModels.Home;
 using System.Diagnostics;
 using ViewModels;
 
 [AllowAnonymous]
 public class HomeController : BaseController
 {
-    public HomeController()
-    {
+    private readonly IRealEstateService realEstateService;
+    private readonly IAgentService agentService;
 
+    public HomeController(IRealEstateService realEstateService, IAgentService agentService)
+    {
+        this.realEstateService = realEstateService;
+        this.agentService = agentService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var model = new HomeViewModel
+        {
+            RealEstates = await realEstateService.GetTopThreeRealEstatesAsync(),
+            Agents = await agentService.GetTopFourAgentsAsync()
+        };
+
+        return View(model);
     }
 
     public IActionResult Privacy()

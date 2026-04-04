@@ -217,4 +217,26 @@ public class RealEstateService : IRealEstateService
             })
             .FirstOrDefaultAsync();
     }
+
+    public async Task<IEnumerable<AllRealEstatesViewModel>> GetTopThreeRealEstatesAsync()
+    {
+        return await baseRepository
+            .AllReadonly<RealEstate>()
+        .Where(r => r.IsDeleted == false)
+        .OrderByDescending(r => r.Id)
+        .Take(3)
+        .Select(r => new AllRealEstatesViewModel
+        {
+            Id = r.Id.ToString(),
+            ImageUrl = r.RealEstateImages.Select(img => img.ImageUrl).FirstOrDefault() ?? "/images/default-property.jpg",
+            Price = r.Price,
+            Title = r.Category.Name,
+            Area = r.Area,
+            Address = $"{r.City.Name}, {r.Address}",
+            RoomsCount = r.RoomsCount,
+            BedroomsCount = r.BedroomsCount,
+            BathroomsCount = r.BathroomsCount
+        })
+        .ToListAsync();
+    }
 }

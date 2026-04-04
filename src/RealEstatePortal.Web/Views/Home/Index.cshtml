@@ -1,8 +1,95 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model HomeViewModel
+
+@{
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="hero-wrapper mb-5">
+    <div class="hero-glass-pill">
+        <h1 class="text-white fw-bold mb-4" style="font-size: 3rem;">Find your home here.</h1>
+        
+        <div style="max-width: 450px; margin: 0 auto;">
+            
+            <div class="bg-white rounded-pill p-1 mb-3 d-flex shadow-sm">
+                <button class="btn hero-toggle-btn active rounded-pill flex-grow-1 fw-medium">Sale</button>
+                <button class="btn hero-toggle-btn rounded-pill flex-grow-1 fw-medium">Rent</button>
+            </div>
+
+            <form method="get" asp-controller="RealEstate" asp-action="Index" class="bg-white rounded-pill p-2 d-flex align-items-center shadow-sm">
+                <i class="bi bi-search text-muted ms-3 me-2 fs-5"></i>
+                <div class="flex-grow-1 text-start">
+                    <span class="d-block text-muted ms-2" style="font-size: 0.65rem; margin-bottom: -4px;">Search</span>
+                    <input type="text" name="SearchTerm" class="form-control border-0 shadow-none bg-transparent p-0 ms-2 pb-1" placeholder="Varna, Sofia..." style="font-size: 0.9rem;">
+                </div>
+                <button type="submit" class="btn btn-light rounded-circle d-flex align-items-center justify-content-center me-1" style="width: 40px; height: 40px;">
+                    <i class="bi bi-sliders text-dark"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="container pb-5">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4 mt-5">
+        <h2 class="fw-bold mb-0">Listings</h2>
+        <a asp-controller="RealEstate" asp-action="Index" class="btn btn-outline-theme rounded-pill px-4 fw-medium">View all</a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+        @foreach (var property in Model.RealEstates)
+        {
+            <div class="col">
+                <a asp-controller="RealEstate" asp-action="Details" asp-route-id="@property.Id" class="text-decoration-none">
+                    <div class="card h-100 border-0 shadow-sm overflow-hidden property-card position-relative">
+                        
+                        <button class="btn btn-light rounded-circle position-absolute top-0 end-0 m-3 shadow-sm d-flex align-items-center justify-content-center heart-btn" style="width: 36px; height: 36px; z-index: 2;" onclick="event.preventDefault();">
+                            <i class="bi bi-heart text-dark fs-6"></i>
+                        </button>
+
+                        <img src="@property.ImageUrl" class="card-img-top object-fit-cover" style="height: 240px;" alt="@property.Title" onerror="this.src='/images/default-property.jpg'">
+                        
+                        <div class="card-body p-3 d-flex flex-column">
+                            <h5 class="fw-bold mb-3" style="color: #009688;">@property.Price.ToString("N0") €</h5>
+                            
+                            <div class="d-flex flex-wrap align-items-center text-muted small mb-2 gap-3">
+                                <span class="d-flex align-items-center"><i class="bi bi-house me-1"></i> @property.Title</span>
+                                <span class="d-flex align-items-center"><i class="bi bi-arrows-fullscreen me-1"></i> @property.Area m²</span>
+                                <span class="d-flex align-items-center text-truncate" style="max-width: 140px;" title="@property.Address"><i class="bi bi-geo-alt me-1"></i> @property.Address</span>
+                            </div>
+                            
+                            <div class="d-flex flex-wrap align-items-center text-muted small gap-3 mt-auto border-top pt-3">
+                                <span class="d-flex align-items-center"><i class="bi bi-door-open me-1"></i> @property.RoomsCount rooms</span>
+                                <span class="d-flex align-items-center"><i class="bi bi-bed me-1"></i> @property.BedroomsCount beds</span>
+                                <span class="d-flex align-items-center"><i class="bi bi-droplet me-1"></i> @property.BathroomsCount baths</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-4 mt-5">
+        <h2 class="fw-bold mb-0">Agents</h2>
+        <a asp-controller="Agent" asp-action="Index" class="btn btn-outline-theme rounded-pill px-4 fw-medium">View all</a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-5">
+        @foreach (var agent in Model.Agents)
+        {
+            <div class="col">
+                <a asp-controller="Agent" asp-action="Details" asp-route-id="@agent.Id" class="text-decoration-none text-dark agent-simple-card">
+                    <img src="@agent.AvatarUrl" alt="@agent.FullName" onerror="this.src='/images/default-avatar.png'">
+                    <h6 class="fw-bold mb-1">@agent.FullName</h6>
+                    
+                    <div class="d-flex flex-column text-muted small gap-1 mt-2">
+                        <span><i class="bi bi-geo-alt me-1"></i> Sofia</span>
+                        <span><i class="bi bi-telephone me-1"></i> @agent.PhoneNumber</span>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+
 </div>

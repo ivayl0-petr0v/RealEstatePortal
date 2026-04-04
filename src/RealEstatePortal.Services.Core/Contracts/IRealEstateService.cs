@@ -16,4 +16,6 @@ public interface IRealEstateService
     Task<string> CreateRealEstateAsync(RealEstateFormModel model, string agentId, string imageFolderPath);
 
     Task<RealEstateDetailsViewModel?> GetDetailsByIdAsync(string id);
+
+    Task<IEnumerable<AllRealEstatesViewModel>> GetTopThreeRealEstatesAsync();
 }

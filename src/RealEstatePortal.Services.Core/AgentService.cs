@@ -257,4 +257,20 @@ public class AgentService : IAgentService
             .Select(a => a.Id.ToString())
             .FirstOrDefaultAsync();
     }
+
+    public async Task<IEnumerable<AllAgentsViewModel>> GetTopFourAgentsAsync()
+    {
+        return await baseRepository
+            .AllReadonly<Agent>()
+            .Take(4)
+            .Select(a => new AllAgentsViewModel
+            {
+                Id = a.Id.ToString(),
+                FullName = a.FullName,
+                PhoneNumber = a.PhoneNumber,
+                AvatarUrl = a.AvatarUrl ?? "/images/default-avatar.png",
+                Address = a.Address
+            })
+            .ToListAsync();
+    }
 }

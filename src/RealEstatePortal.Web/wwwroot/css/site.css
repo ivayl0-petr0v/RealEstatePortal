@@ -232,3 +232,52 @@ h1, h2, h3, h4, h5, h6 {
         display: none;
     }
 }
+
+/* 7. Hero section & glass effect */
+.hero-wrapper {
+    background: url('/images/hero-bg.jpg') center/cover no-repeat;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: -1rem;
+}
+
+.hero-glass-pill {
+    background: rgba(0, 0, 0, 0.40);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 120px;
+    padding: 3rem 5rem;
+    text-align: center;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+}
+
+.hero-toggle-btn.active {
+    background-color: #343a40;
+    color: white;
+}
+
+.hero-toggle-btn {
+    background-color: transparent;
+    color: #343a40;
+}
+
+.agent-simple-card img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 1rem;
+    transition: transform 0.3s ease;
+}
+
+.agent-simple-card:hover img {
+    transform: scale(1.03);
+}

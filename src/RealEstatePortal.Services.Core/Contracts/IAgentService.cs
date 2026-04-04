@@ -26,4 +26,6 @@ public interface IAgentService
     Task<string?> GetAgentUserIdAsync(string agentId);
 
     Task<string?> GetAgentIdByUserIdAsync(string userId);
+
+    Task<IEnumerable<AllAgentsViewModel>> GetTopFourAgentsAsync();
 }
