@@ -3,7 +3,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstatePortal.GCommon.Exceptions;
-using RealEstatePortal.Web.ViewModels.Agent;
 using Services.Core.Contracts;
 using ViewModels.RealEstate;
 using static GCommon.ApplicationConstants;
@@ -24,13 +23,14 @@ public class RealEstateController : BaseController
         this.webHostEnvironment = webHostEnvironment;
     }
 
+    [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index([FromQuery] AllRealEstatesQueryModel queryModel)
     {
-        IEnumerable<AllRealEstatesViewModel> allRealEstates = await realEstateService
-            .GetAllRealEstatesAsync();
+        var model = await realEstateService
+            .GetAllRealEstatesAsync(queryModel);
 
-        return View(allRealEstates);
+        return View(model);
     }
 
     [HttpGet]

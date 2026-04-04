@@ -14,16 +14,48 @@ public class RealEstateService : IRealEstateService
     private readonly IBaseRepository baseRepository;
 
     public RealEstateService(IBaseRepository baseRepository)
+
     {
         this.baseRepository = baseRepository;
     }
 
-    public async Task<IEnumerable<AllRealEstatesViewModel>> GetAllRealEstatesAsync()
+    public async Task<AllRealEstatesQueryModel> GetAllRealEstatesAsync(AllRealEstatesQueryModel queryModel)
     {
-        var allRealEstates = await baseRepository
+        var query = baseRepository
             .AllReadonly<RealEstate>()
-            .Where(re => re.IsDeleted == false)
-            .OrderByDescending(re => re.Id)
+            .Where(re => re.IsDeleted == false);
+
+        if (!string.IsNullOrWhiteSpace(queryModel.TransactionType))
+        {
+            if (Enum.TryParse<TransactionType>(queryModel.TransactionType, out TransactionType parsedTransactionType))
+            {
+                query = query
+                    .Where(re => re.TransactionType == parsedTransactionType);
+            }
+        }
+
+        if (!string.IsNullOrWhiteSpace(queryModel.SearchTerm))
+        {
+            string wildCard = $"%{queryModel.SearchTerm.ToLower()}%";
+            query = query
+                .Where(re => EF.Functions.Like(re.City.Name.ToLower(), wildCard) ||
+                             EF.Functions.Like(re.Address.ToLower(), wildCard) ||
+                             EF.Functions.Like(re.Category.Name.ToLower(), wildCard));
+        }
+
+        query = queryModel.Sorting switch
+        {
+            "price_asc" => query.OrderBy(re => re.Price),
+            "price_desc" => query.OrderByDescending(re => re.Price),
+            _ => query.OrderByDescending(re => re.Id)
+        };
+
+        queryModel.TotalRealEstatesCount = await query
+            .CountAsync();
+
+        queryModel.RealEstates = await query
+            .Skip((queryModel.CurrentPage - 1) * queryModel.RealEstatesPerPage)
+            .Take(queryModel.RealEstatesPerPage)
             .Select(re => new AllRealEstatesViewModel
             {
                 Id = re.Id.ToString(),
@@ -36,9 +68,9 @@ public class RealEstateService : IRealEstateService
                 BedroomsCount = re.BedroomsCount,
                 BathroomsCount = re.BathroomsCount
             })
-            .ToArrayAsync();
+            .ToListAsync();
 
-        return allRealEstates;
+        return queryModel;
     }
 
     public async Task<IEnumerable<SelectListItemViewModel>> GetAllCategoriesAsync()
