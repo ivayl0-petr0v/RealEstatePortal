@@ -144,8 +144,8 @@ public class AgentController : BaseController
         }
         catch (AgentEditFailureException e)
         {
-            logger.LogError(e, EditAgentFailureMessage, id);
-            ModelState.AddModelError(string.Empty, EditAgentFailureMessage);
+            logger.LogError(e, EditAgentLogError, id);
+            ModelState.AddModelError(string.Empty, EditAgentModelError);
             return View(model);
         }
         catch (Exception ex)
@@ -173,10 +173,7 @@ public class AgentController : BaseController
         var model = await agentService
             .GetAgentForDeleteByIdAsync(id);
 
-        if (model == null)
-        {
-            return NotFound();
-        }
+        if (model == null) return NotFound();
 
         return View(model);
     }
@@ -204,8 +201,8 @@ public class AgentController : BaseController
         }
         catch (AgentDeleteFailureException e)
         {
-            logger.LogError(e, DeleteAgentFailureMessage, id);
-            ModelState.AddModelError(string.Empty, DeleteAgentFailureMessage);
+            logger.LogError(e, DeleteAgentLogError, id);
+            ModelState.AddModelError(string.Empty, DeleteAgentModelError);
             return RedirectToAction(nameof(Details), new { id });
         }
         catch (Exception ex)

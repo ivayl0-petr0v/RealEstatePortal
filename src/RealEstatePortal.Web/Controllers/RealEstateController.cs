@@ -72,10 +72,7 @@ public class RealEstateController : BaseController
 
         if (!ModelState.IsValid)
         {
-            formModel.Categories = await realEstateService.GetAllCategoriesAsync();
-            formModel.Cities = await realEstateService.GetAllCitiesAsync();
-            formModel.Features = await realEstateService.GetAllFeaturesAsync();
-
+            await LoadDropdownDataAsync(formModel);
             return View(formModel);
         }
 
@@ -83,7 +80,7 @@ public class RealEstateController : BaseController
         {
             string imageFolderPath = Path.Combine(webHostEnvironment.WebRootPath, "images", "real-estates");
             string newRealEstateId = await realEstateService.CreateRealEstateAsync(formModel, agentId, imageFolderPath);
-            TempData["SuccessError"] = RealEstateCreatedSuccessfullyMessage;
+            TempData["SuccessMessage"] = RealEstateCreatedSuccessfullyMessage;
             return RedirectToAction("Details", new { id = newRealEstateId });
         }
         catch (RealEstateCreateFailureException e)
@@ -91,10 +88,7 @@ public class RealEstateController : BaseController
             logger.LogError(e, CreateRealEstateFailureMessage);
             ModelState.AddModelError(string.Empty, CreateRealEstateFailureMessage);
 
-            formModel.Categories = await realEstateService.GetAllCategoriesAsync();
-            formModel.Cities = await realEstateService.GetAllCitiesAsync();
-            formModel.Features = await realEstateService.GetAllFeaturesAsync();
-
+            await LoadDropdownDataAsync(formModel);
             return View(formModel);
         }
         catch (Exception ex)
@@ -102,10 +96,7 @@ public class RealEstateController : BaseController
             logger.LogError(ex, UnexpectedErrorMessage);
             ModelState.AddModelError(string.Empty, UnexpectedErrorMessage);
 
-            formModel.Categories = await realEstateService.GetAllCategoriesAsync();
-            formModel.Cities = await realEstateService.GetAllCitiesAsync();
-            formModel.Features = await realEstateService.GetAllFeaturesAsync();
-
+            await LoadDropdownDataAsync(formModel);
             return View(formModel);
         }
     }
@@ -133,5 +124,129 @@ public class RealEstateController : BaseController
         }
 
         return View(model);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Edit(string id)
+    {
+        if (!await realEstateService.ExistsByIdAsync(id)) return NotFound();
+
+        string? agendId = await agentService
+            .GetAgentIdByUserIdAsync(GetCurrentUserId()!);
+        if (agendId == null || !await realEstateService.IsAgentIdOwnerOfRealEstateIdAsync(id, agendId))
+        {
+            return Unauthorized();
+        }
+
+        var formModel = await realEstateService.GetRealEstateForEditByIdAsync(id);
+        formModel!.Categories = await realEstateService.GetAllCategoriesAsync();
+        formModel.Cities = await realEstateService.GetAllCitiesAsync();
+        formModel.Features = await realEstateService.GetAllFeaturesAsync();
+
+        return View(formModel);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(string id, RealEstateFormModel model)
+    {
+        int countToBeDeleted = model.RemovedImagesUrls?.Count ?? 0;
+
+        if (!ModelState.IsValid)
+        {
+            await LoadDropdownDataAsync(model);
+            return View(model);
+        }
+
+        string? agentId = await agentService.GetAgentIdByUserIdAsync(GetCurrentUserId()!);
+        if (agentId == null || !await realEstateService.IsAgentIdOwnerOfRealEstateIdAsync(id, agentId))
+        {
+            return Unauthorized();
+        }
+
+        try
+        {
+            string imageFolderPath = Path.Combine(webHostEnvironment.WebRootPath, "images", "real-estates");
+            await realEstateService.EditRealEstateAsync(id, model, imageFolderPath);
+            TempData["SuccessMessage"] = RealEstateUpdatedSuccessfullyMessage;
+
+            return RedirectToAction(nameof(Details), new { id });
+        }
+        catch (RealEstateEditFailureException e)
+        {
+            logger.LogError(e, EditRealEstateLogError, id);
+            ModelState.AddModelError(string.Empty, EditRealEstateModelError);
+
+            await LoadDropdownDataAsync(model);
+            return View(model);
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, UnexpectedErrorMessage);
+            ModelState.AddModelError(string.Empty, UnexpectedErrorMessage);
+
+            return View(model);
+        }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Delete(string id)
+    {
+        if (!await realEstateService.ExistsByIdAsync(id)) return NotFound();
+
+        string currentUserId = GetCurrentUserId()!;
+        string? agentId = await agentService.GetAgentIdByUserIdAsync(currentUserId);
+
+        if (agentId == null || !await realEstateService.IsAgentIdOwnerOfRealEstateIdAsync(id, agentId))
+        {
+            return Unauthorized();
+        }
+
+        var model = await realEstateService.GetRealEstateForDeleteByIdAsync(id);
+        if (model == null) return NotFound();
+
+        return View(model);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(string id)
+    {
+        if (!await realEstateService.ExistsByIdAsync(id)) return NotFound();
+
+        string currentUserId = GetCurrentUserId()!;
+        string? agentId = await agentService.GetAgentIdByUserIdAsync(currentUserId);
+
+        if (agentId == null || !await realEstateService.IsAgentIdOwnerOfRealEstateIdAsync(id, agentId))
+        {
+            return Unauthorized();
+        }
+
+        try
+        {
+            await realEstateService.DeleteRealEstateAsync(id);
+
+            TempData["SuccessMessage"] = "Property deleted successfully.";
+            return RedirectToAction(nameof(Index));
+        }
+        catch (RealEstateDeleteFailureException e)
+        {
+            logger.LogError(e, DeleteRealEstateLogError, id);
+            ModelState.AddModelError(string.Empty, DeleteRealEstateModelError);
+            return RedirectToAction(nameof(Delete), new { id });
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, UnexpectedErrorMessage);
+            ModelState.AddModelError(string.Empty, UnexpectedErrorMessage);
+            return RedirectToAction(nameof(Delete), new { id });
+        }
+    }
+
+    private async Task LoadDropdownDataAsync(RealEstateFormModel model)
+    {
+        model.Categories = await realEstateService.GetAllCategoriesAsync();
+        model.Cities = await realEstateService.GetAllCitiesAsync();
+        model.Features = await realEstateService.GetAllFeaturesAsync();
     }
 }

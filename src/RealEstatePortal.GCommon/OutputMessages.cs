@@ -46,9 +46,12 @@ public static class OutputMessages
 
         public const string AgentEditedSuccessfullyMessage = "Agent's profile updated successfully!";
 
-        public const string EditAgentFailureMessage = "Error while editing agent {0}";
+        public const string EditAgentLogError = "Error while editing agent {0}";
 
-        public const string DeleteAgentFailureMessage = "Error while editing agent {0}";
+        public const string EditAgentModelError = "An error occurred while editing the agent. Please try again.";
+
+        public const string DeleteAgentLogError = "Error while deleting agent {0}";
+        public const string DeleteAgentModelError = "An error occurred while deleting the agent. Please try again.";
 
         public const string AgentDeletedSuccessfullyMessage = "Your agent's profile deleted successfully";
 
@@ -96,6 +99,10 @@ public static class OutputMessages
         public const string RealEstateCreatedSuccessfullyMessage = "Property listing created successfully.";
         public const string CreateRealEstateFailureMessage = "An error occurred while creating the property listing. Please try again.";
         public const string RealEstateNotFoundMessage = "Property not found.";
-
+        public const string RealEstateUpdatedSuccessfullyMessage = "Property updated successfully.";
+        public const string EditRealEstateLogError = "Error while editing property {0}";
+        public const string EditRealEstateModelError = "An error occurred while editing the property. Please try again.";
+        public const string DeleteRealEstateLogError = "Unexpected error occurred while deleting the property {0}";
+        public const string DeleteRealEstateModelError = "An unexpected error occurred. Please try again later.";
     }
 }

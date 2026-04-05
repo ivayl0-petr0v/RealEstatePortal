@@ -1,11 +1,11 @@
 ﻿@model RealEstateFormModel
 
 @{
-    ViewData["Title"] = "Create Listing";
+    ViewData["Title"] = "Create Property";
 }
 
 <div class="container py-5">
-    <h2 class="mb-4 fw-bold">Create Listing</h2>
+    <h2 class="mb-4 fw-bold">Create Property</h2>
 
     <form asp-action="Create" method="post" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4" role="alert"></div>
@@ -178,7 +178,7 @@
                 </div>
 
                 <div class="text-end mb-5">
-                    <button type="submit" class="btn btn-theme border-0 shadow-sm w-100">Publish Listing</button>
+                    <button type="submit" class="btn btn-theme border-0 shadow-sm w-100">Create property</button>
                 </div>
 
             </div>

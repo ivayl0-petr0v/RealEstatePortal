@@ -72,4 +72,8 @@ public class RealEstateFormModel
     public IEnumerable<FeatureCheckboxViewModel> Features { get; set; } = new List<FeatureCheckboxViewModel>();
 
     public IEnumerable<IFormFile> Images { get; set; } = new List<IFormFile>();
+
+    public List<string> ExistingImageUrls { get; set; } = new List<string>();
+
+    public List<string> RemovedImagesUrls { get; set; } = new List<string>();
 }

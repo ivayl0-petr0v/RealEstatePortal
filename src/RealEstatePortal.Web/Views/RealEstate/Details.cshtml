@@ -32,34 +32,40 @@
 
 	@{
 		var images = Model.ImageUrls.ToList();
+		int imageCount = images.Count;
+		
+		string colClass = "col-12";
+		if (imageCount == 2) colClass = "col-6";
+		else if (imageCount >= 3) colClass = "col-4";
 	}
-	<div class="property-gallery">
-		@if (images.Any())
-		{
-			<img src="@images[0]" class="gallery-item gallery-main" alt="Main image" onclick="openGallery(0)">
-            
-			@for (int i = 1; i < Math.Min(images.Count, 4); i++)
+	
+	<div class="rounded-6 overflow-hidden shadow-sm mb-4 bg-white">
+        
+		<div class="row m-0">
+			@if (imageCount == 0)
 			{
-				<img src="@images[i]" class="gallery-item" alt="Property image" onclick="openGallery(@i)">
-			}
-
-			@if (images.Count > 4)
-			{
-				<div class="gallery-more" onclick="openGallery(4)">
-					More Images (+@(images.Count - 4))
+				<div class="col-12 p-0">
+					<img src="/images/default-property.jpg" class="w-100" style="height: 400px; object-fit: cover;" alt="No Image">
 				</div>
 			}
-			else if (images.Count == 4)
+			else
 			{
-				<img src="@images[3]" class="gallery-item" alt="Property image" onclick="openGallery(3)">
+				@for (int i = 0; i < Math.Min(imageCount, 3); i++)
+				{
+					<div class="@colClass p-0 position-relative @(i < 2 && imageCount > 1 ? "border-end border-white border-2" : "")" style="cursor: pointer;" onclick="openGallery(@i)">
+                        
+						<img src="@images[i]" class="w-100" style="height: 400px; object-fit: cover;" alt="Property Image @(i + 1)">
+                        
+						@if (i == 2 && imageCount > 3)
+						{
+							<div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" style="background: rgba(0,0,0,0.5); margin: 0;">
+								<span class="text-white fs-4 fw-bold">+@(imageCount - 3) Photos</span>
+							</div>
+						}
+					</div>
+				}
 			}
-		}
-		else
-		{
-			<div class="gallery-item gallery-main bg-secondary d-flex align-items-center justify-content-center text-white">
-				No images uploaded
-			</div>
-		}
+		</div>
 	</div>
 
 	<div class="row g-4">

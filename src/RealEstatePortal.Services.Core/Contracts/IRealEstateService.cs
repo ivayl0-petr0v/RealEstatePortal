@@ -18,4 +18,16 @@ public interface IRealEstateService
     Task<RealEstateDetailsViewModel?> GetDetailsByIdAsync(string id);
 
     Task<IEnumerable<AllRealEstatesViewModel>> GetTopThreeRealEstatesAsync();
+
+    Task<RealEstateFormModel?> GetRealEstateForEditByIdAsync(string id);
+
+    Task EditRealEstateAsync(string id, RealEstateFormModel model, string imageFolderPath);
+
+    Task<RealEstateDeleteViewModel?> GetRealEstateForDeleteByIdAsync(string id);
+
+    Task DeleteRealEstateAsync(string id);
+
+    Task<bool> ExistsByIdAsync(string id);
+
+    Task<bool> IsAgentIdOwnerOfRealEstateIdAsync(string realEstateId, string agentId);
 }

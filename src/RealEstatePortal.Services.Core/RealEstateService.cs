@@ -4,6 +4,7 @@ using Contracts;
 using Data.Models;
 using Data.Models.Enums;
 using Data.Repository.Contracts;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 using Web.ViewModels.RealEstate;
@@ -151,28 +152,7 @@ public class RealEstateService : IRealEstateService
             Directory.CreateDirectory(imageFolderPath);
         }
 
-        if (model.Images != null && model.Images.Any())
-        {
-            foreach (var image in model.Images)
-            {
-                if (image.Length > 0)
-                {
-                    string extension = Path.GetExtension(image.FileName);
-                    string uniqueFileName = $"{Guid.NewGuid()}{extension}";
-                    string filePath = Path.Combine(imageFolderPath, uniqueFileName);
-
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await image.CopyToAsync(fileStream);
-                    }
-
-                    realEstate.RealEstateImages.Add(new RealEstateImage
-                    {
-                        ImageUrl = $"/images/real-estates/{uniqueFileName}"
-                    });
-                }
-            }
-        }
+        await SaveImagesToRealEstateAsync(model.Images, imageFolderPath, realEstate);
 
         await baseRepository.AddAsync(realEstate);
         await baseRepository.SaveChangesAsync();
@@ -188,6 +168,7 @@ public class RealEstateService : IRealEstateService
         return await baseRepository
             .AllReadonly<RealEstate>()
             .Where(re => re.Id == realEstateGuid && re.IsDeleted == false)
+            .Include(re => re.RealEstateImages)
             .Select(re => new RealEstateDetailsViewModel
             {
                 Id = re.Id.ToString(),
@@ -228,7 +209,9 @@ public class RealEstateService : IRealEstateService
         .Select(r => new AllRealEstatesViewModel
         {
             Id = r.Id.ToString(),
-            ImageUrl = r.RealEstateImages.Select(img => img.ImageUrl).FirstOrDefault() ?? "/images/default-property.jpg",
+            ImageUrl = r.RealEstateImages
+                .Select(img => img.ImageUrl)
+                .FirstOrDefault() ?? "/images/default-property.jpg",
             Price = r.Price,
             Title = r.Category.Name,
             Area = r.Area,
@@ -238,5 +221,204 @@ public class RealEstateService : IRealEstateService
             BathroomsCount = r.BathroomsCount
         })
         .ToListAsync();
+    }
+
+    public async Task<RealEstateFormModel?> GetRealEstateForEditByIdAsync(string id)
+    {
+        var realEstate = await baseRepository
+            .AllReadonly<RealEstate>()
+            .Include(re => re.RealEstateImages)
+            .Include(re => re.RealEstateFeatures)
+            .Where(re => re.Id.ToString() == id && !re.IsDeleted)
+            .FirstOrDefaultAsync();
+
+        if (realEstate == null) return null;
+
+        return new RealEstateFormModel
+        {
+            Price = realEstate.Price,
+            Area = realEstate.Area,
+            TransactionType = realEstate.TransactionType,
+            Address = realEstate.Address,
+            RoomsCount = realEstate.RoomsCount,
+            BedroomsCount = realEstate.BedroomsCount,
+            BathroomsCount = realEstate.BathroomsCount,
+            ConstructionType = realEstate.ConstructionType,
+            ConstructionYear = realEstate.ConstructionYear,
+            CompletionStatus = realEstate.CompletionStatus,
+            Furnishing = realEstate.Furnishing,
+            TotalFloors = realEstate.TotalFloors,
+            RealEstateFloor = realEstate.RealEstateFloor,
+            Description = realEstate.Description,
+            CategoryId = realEstate.CategoryId,
+            CityId = realEstate.CityId,
+            SelectedExposures = realEstate
+                .Exposure?
+                .Split(", ")
+                .ToList() ?? new List<string>(),
+            ExistingImageUrls = realEstate
+                .RealEstateImages
+                .Select(img => img.ImageUrl)
+                .ToList(),
+            SelectedFeatureIds = realEstate
+                .RealEstateFeatures
+                .Select(rf => rf.FeatureId)
+                .ToList()
+        };
+    }
+
+    public async Task EditRealEstateAsync(string id, RealEstateFormModel model, string imageFolderPath)
+    {
+        var realEstate = await baseRepository
+            .All<RealEstate>()
+            .Where(re => re.Id.ToString() == id && !re.IsDeleted)
+            .Include(re => re.RealEstateImages)
+            .Include(re => re.RealEstateFeatures)
+            .FirstOrDefaultAsync();
+
+        if (realEstate != null)
+        {
+            realEstate.Price = model.Price;
+            realEstate.Area = model.Area;
+            realEstate.TransactionType = model.TransactionType;
+            realEstate.Address = model.Address;
+            realEstate.RoomsCount = model.RoomsCount;
+            realEstate.BedroomsCount = model.BedroomsCount;
+            realEstate.BathroomsCount = model.BathroomsCount;
+            realEstate.ConstructionType = model.ConstructionType;
+            realEstate.ConstructionYear = model.ConstructionYear;
+            realEstate.CompletionStatus = model.CompletionStatus;
+            realEstate.Furnishing = model.Furnishing;
+            realEstate.TotalFloors = model.TotalFloors;
+            realEstate.RealEstateFloor = model.RealEstateFloor;
+            realEstate.Description = model.Description;
+            realEstate.CategoryId = model.CategoryId;
+            realEstate.CityId = model.CityId;
+            realEstate.Exposure = model
+                .SelectedExposures
+                .Any() ? string
+                .Join(", ", model.SelectedExposures) : null;
+
+            realEstate.RealEstateFeatures.Clear();
+            foreach (var featureId in model.SelectedFeatureIds)
+            {
+                realEstate.RealEstateFeatures.Add(new RealEstateFeature { FeatureId = featureId });
+            }
+
+            if (!Directory.Exists(imageFolderPath))
+            {
+                Directory.CreateDirectory(imageFolderPath);
+            }
+
+            DeleteRemovedImages(model.RemovedImagesUrls, realEstate, imageFolderPath);
+
+            await SaveImagesToRealEstateAsync(model.Images, imageFolderPath, realEstate);
+
+            await baseRepository.SaveChangesAsync();
+        }
+    }
+
+    public async Task<RealEstateDeleteViewModel?> GetRealEstateForDeleteByIdAsync(string id)
+    {
+        return await baseRepository
+            .AllReadonly<RealEstate>()
+            .Where(re => re.Id.ToString() == id && !re.IsDeleted)
+            .Select(re => new RealEstateDeleteViewModel
+            {
+                Id = re.Id.ToString(),
+                Title = re.Category.Name,
+                Address = $"{re.City.Name}, {re.Address}",
+                Price = re.Price,
+                ImageUrl = re.RealEstateImages.Select(i => i.ImageUrl).FirstOrDefault() ?? "/images/default-property.jpg"
+            })
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task DeleteRealEstateAsync(string id)
+    {
+        var realEstate = await baseRepository
+            .All<RealEstate>()
+            .Where(re => re.Id.ToString() == id)
+            .FirstOrDefaultAsync();
+
+        if (realEstate != null)
+        {
+            realEstate.IsDeleted = true;
+            await baseRepository.SaveChangesAsync();
+        }
+    }
+
+    public async Task<bool> ExistsByIdAsync(string id)
+    {
+        return await baseRepository
+            .AllReadonly<RealEstate>()
+            .AnyAsync(re => re.Id.ToString() == id && re.IsDeleted == false);
+    }
+
+    public async Task<bool> IsAgentIdOwnerOfRealEstateIdAsync(string realEstateId, string agentId)
+    {
+        return await baseRepository
+            .AllReadonly<RealEstate>()
+            .AnyAsync(re => re.Id.ToString() == realEstateId && re.AgentId.ToString() == agentId);
+    }
+
+    private async Task SaveImagesToRealEstateAsync(IEnumerable<IFormFile>? images, string imageFolderPath, RealEstate realEstate)
+    {
+        if (images == null || !images.Any())
+        {
+            return;
+        }
+
+        if (!Directory.Exists(imageFolderPath))
+        {
+            Directory.CreateDirectory(imageFolderPath);
+        }
+
+        foreach (var image in images)
+        {
+            if (image.Length > 0)
+            {
+                string extension = Path.GetExtension(image.FileName);
+                string uniqueFileName = $"{Guid.NewGuid()}{extension}";
+                string filePath = Path.Combine(imageFolderPath, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image.CopyToAsync(fileStream);
+                }
+
+                realEstate.RealEstateImages.Add(new RealEstateImage
+                {
+                    ImageUrl = $"/images/real-estates/{uniqueFileName}"
+                });
+            }
+        }
+    }
+
+    private void DeleteRemovedImages(IEnumerable<string>? removedImagesUrls, RealEstate realEstate, string imageFolderPath)
+    {
+        if (removedImagesUrls == null || !removedImagesUrls.Any())
+        {
+            return;
+        }
+
+        var imagesToRemove = realEstate.RealEstateImages
+            .Where(img => removedImagesUrls.Contains(img.ImageUrl))
+            .ToList();
+
+        foreach (var img in imagesToRemove)
+        {
+            string fileName = Path.GetFileName(img.ImageUrl);
+            string physicalPath = Path.Combine(imageFolderPath, fileName);
+
+            if (File.Exists(physicalPath))
+            {
+                File.Delete(physicalPath);
+            }
+
+            realEstate.RealEstateImages.Remove(img);
+
+            baseRepository.Delete(img);
+        }
     }
 }
