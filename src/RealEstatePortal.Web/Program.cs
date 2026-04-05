@@ -35,7 +35,9 @@ public class Program
             .AddDefaultIdentity<ApplicationUser>(options =>
             {
                 ConfigureIdentity(builder.Configuration, options);
-            }).AddEntityFrameworkStores<RealEstateDbContext>();
+            })
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<RealEstateDbContext>();
 
         builder.Services.AddControllersWithViews();
 

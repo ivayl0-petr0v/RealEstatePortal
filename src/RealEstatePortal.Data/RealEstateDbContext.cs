@@ -1,9 +1,10 @@
 ﻿namespace RealEstatePortal.Data
 {
+    using Configurations;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-    using Configurations;
     using Models;
+    using RealEstatePortal.Data.Configurations.Roles;
 
     public class RealEstateDbContext : IdentityDbContext
     {
@@ -39,6 +40,11 @@
             builder.ApplyConfiguration(new RealEstateFeatureConfiguration());
             builder.ApplyConfiguration(new RealEstateImageConfiguration());
             builder.ApplyConfiguration(new UserFavoriteRealEstateConfiguration());
+            
+            //Roles
+            builder.ApplyConfiguration(new RoleConfiguration());
+            builder.ApplyConfiguration(new AdminUserConfiguration());
+            builder.ApplyConfiguration(new UserRoleConfiguration());
         }
     }
 }
