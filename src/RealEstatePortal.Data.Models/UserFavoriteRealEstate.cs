@@ -8,6 +8,4 @@ public class UserFavoriteRealEstate
 
     public Guid RealEstateId { get; set; }
     public virtual RealEstate RealEstate { get; set; } = null!;
-
-    //TODO:  Add IsDeleted property to allow users to remove real estate from favorites without deleting the record from the database
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstatePortal.GCommon.Exceptions;
 using Services.Core.Contracts;
+using System.Security.Claims;
 using ViewModels.RealEstate;
 using static GCommon.ApplicationConstants;
 using static GCommon.OutputMessages.RealEstate;
@@ -27,8 +28,10 @@ public class RealEstateController : BaseController
     [AllowAnonymous]
     public async Task<IActionResult> Index([FromQuery] AllRealEstatesQueryModel queryModel)
     {
+        var userId = GetCurrentUserId();
+
         var model = await realEstateService
-            .GetAllRealEstatesAsync(queryModel);
+            .GetAllRealEstatesAsync(queryModel, userId);
 
         return View(model);
     }
@@ -105,8 +108,11 @@ public class RealEstateController : BaseController
     [AllowAnonymous]
     public async Task<IActionResult> Details(string id)
     {
-        var model = await realEstateService
-            .GetDetailsByIdAsync(id);
+        string? currentUserId = User.Identity?.IsAuthenticated == true
+            ? GetCurrentUserId()
+            : null;
+
+        var model = await realEstateService.GetDetailsByIdAsync(id, currentUserId);
 
         if (model == null)
         {
@@ -114,11 +120,9 @@ public class RealEstateController : BaseController
             return RedirectToAction("Index", "RealEstate");
         }
 
-        if (User.Identity?.IsAuthenticated == true)
+        if (currentUserId != null)
         {
-            string currentUserId = GetCurrentUserId()!;
-            string? currentAgentId = await agentService
-                .GetAgentIdByUserIdAsync(currentUserId);
+            string? currentAgentId = await agentService.GetAgentIdByUserIdAsync(currentUserId);
 
             model.IsOwner = (currentAgentId == model.AgentId);
         }
@@ -241,6 +245,34 @@ public class RealEstateController : BaseController
             ModelState.AddModelError(string.Empty, UnexpectedErrorMessage);
             return RedirectToAction(nameof(Delete), new { id });
         }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Favorites()
+    {
+        var userId = GetCurrentUserId();
+        var model = await realEstateService
+            .GetFavoritesByUserIdAsync(userId!);
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ToggleFavorite(string id, string returnUrl)
+    {
+        var userId = GetCurrentUserId();
+        if (userId == null)
+        {
+            return Challenge();
+        }
+        await realEstateService.ToggleFavoriteAsync(id, userId);
+
+        if (!string.IsNullOrEmpty(returnUrl))
+        {
+            return Redirect(returnUrl);
+        }
+        return RedirectToAction(nameof(Index));
     }
 
     private async Task LoadDropdownDataAsync(RealEstateFormModel model)

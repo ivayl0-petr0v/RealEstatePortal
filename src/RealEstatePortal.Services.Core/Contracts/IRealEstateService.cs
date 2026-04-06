@@ -6,7 +6,7 @@ using RealEstatePortal.Web.ViewModels.RealEstate.Common;
 
 public interface IRealEstateService
 {
-    Task<AllRealEstatesQueryModel> GetAllRealEstatesAsync(AllRealEstatesQueryModel queryModel);
+    Task<AllRealEstatesQueryModel> GetAllRealEstatesAsync(AllRealEstatesQueryModel queryModel, string? userId = null);
 
     Task<IEnumerable<SelectListItemViewModel>> GetAllCategoriesAsync();
 
@@ -16,7 +16,7 @@ public interface IRealEstateService
 
     Task<string> CreateRealEstateAsync(RealEstateFormModel model, string agentId, string imageFolderPath);
 
-    Task<RealEstateDetailsViewModel?> GetDetailsByIdAsync(string id);
+    Task<RealEstateDetailsViewModel?> GetDetailsByIdAsync(string id, string? userId = null);
 
     Task<IEnumerable<AllRealEstatesViewModel>> GetTopThreeRealEstatesAsync();
 
@@ -33,4 +33,10 @@ public interface IRealEstateService
     Task<bool> IsAgentIdOwnerOfRealEstateIdAsync(string realEstateId, string agentId);
 
     Task<IEnumerable<AdminRealEstateViewModel>> GetAllForAdminAsync();
+
+    Task<bool> ToggleFavoriteAsync(string realEstateId, string userId);
+
+    Task<bool> IsFavoriteAsync(string realEstateId, string userId);
+
+    Task<IEnumerable<FavoriteRealEstateViewModel>> GetFavoritesByUserIdAsync(string userId);
 }
