@@ -1,5 +1,6 @@
 ﻿namespace RealEstatePortal.Services.Core.Contracts;
 
+using RealEstatePortal.Web.ViewModels.Admin;
 using RealEstatePortal.Web.ViewModels.RealEstate;
 using RealEstatePortal.Web.ViewModels.RealEstate.Common;
 
@@ -30,4 +31,6 @@ public interface IRealEstateService
     Task<bool> ExistsByIdAsync(string id);
 
     Task<bool> IsAgentIdOwnerOfRealEstateIdAsync(string realEstateId, string agentId);
+
+    Task<IEnumerable<AdminRealEstateViewModel>> GetAllForAdminAsync();
 }

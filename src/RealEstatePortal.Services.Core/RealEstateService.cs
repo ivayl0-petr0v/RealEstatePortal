@@ -6,6 +6,7 @@ using Data.Models.Enums;
 using Data.Repository.Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using RealEstatePortal.Web.ViewModels.Admin;
 using System.IO;
 using Web.ViewModels.RealEstate;
 using Web.ViewModels.RealEstate.Common;
@@ -420,5 +421,21 @@ public class RealEstateService : IRealEstateService
 
             baseRepository.Delete(img);
         }
+    }
+
+    public async Task<IEnumerable<AdminRealEstateViewModel>> GetAllForAdminAsync()
+    {
+        return await baseRepository.AllReadonly<RealEstate>()
+        .Where(re => !re.IsDeleted)
+        .Select(re => new AdminRealEstateViewModel
+        {
+            Id = re.Id.ToString(),
+            Title = re.Category.Name,
+            Price = re.Price,
+            Address = re.City.Name + ", " + re.Address,
+            AgentName = re.Agent.FullName,
+            AgentEmail = re.Agent.User.Email
+        })
+        .ToListAsync();
     }
 }

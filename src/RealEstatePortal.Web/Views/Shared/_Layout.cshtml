@@ -37,8 +37,16 @@
 							<a class="nav-link text-dark" asp-area="" asp-controller="Agent" asp-action="Index">Agents</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="RealEstate" asp-action="Index">Real estates</a>
+							<a class="nav-link text-dark" asp-area="" asp-controller="RealEstate" asp-action="Index">Properties</a>
 						</li>
+						@if (User.IsInRole("Administrator"))
+						{
+							<li class="nav-item">
+								<a class="nav-link text-danger fw-bold" asp-area="Admin" asp-controller="Home" asp-action="Index">
+									<i class="bi bi-shield-lock me-1"></i> Admin Panel
+								</a>
+							</li>
+						}
 					</ul>
 					<partial name="_LoginPartial" />
 				</div>
