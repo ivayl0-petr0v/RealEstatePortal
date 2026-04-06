@@ -51,4 +51,6 @@ public class RealEstateDetailsViewModel
     public string? AgentAvatarUrl { get; set; }
 
     public bool IsOwner { get; set; }
+
+    public bool IsFavorite { get; set; }
 }

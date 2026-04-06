@@ -1,4 +1,5 @@
 ﻿@model RealEstateDetailsViewModel
+@using System.Security.Claims
 
 @{
 	ViewData["Title"] = Model.Title;
@@ -23,9 +24,16 @@
 			}
 			else
 			{
-				<button class="btn btn-sm btn-light text-danger rounded-circle border-0" title="Add to favorites">
-					<i class="bi bi-heart fs-5"></i>
-				</button>
+				@if (User.Identity?.IsAuthenticated == true)
+				{
+					<form asp-action="ToggleFavorite" asp-route-id="@Model.Id" method="post" class="d-inline">
+						<input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                    
+						<button type="submit" class="btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; border: 1px solid #eee;">
+							<i class="bi @(Model.IsFavorite ? "bi-heart-fill text-danger" : "bi-heart text-dark") fs-5"></i>
+						</button>
+					</form>
+				}
 			}
 		</div>
 	</div>

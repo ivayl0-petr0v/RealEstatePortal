@@ -39,6 +39,9 @@
 						<li class="nav-item">
 							<a class="nav-link text-dark" asp-area="" asp-controller="RealEstate" asp-action="Index">Properties</a>
 						</li>
+						<li class="nav-item">
+							<a class="nav-link text-dark" asp-area="" asp-controller="RealEstate" asp-action="Favorites">Favorites</a>
+						</li>
 						@if (User.IsInRole("Administrator"))
 						{
 							<li class="nav-item">
@@ -68,6 +71,8 @@
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
+	<script src="~/js/real-estate-detele-img.js" asp-append-version="true"></script>
+	<script src="~/js/real-estate-gallery.js" asp-append-version="true"></script>
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

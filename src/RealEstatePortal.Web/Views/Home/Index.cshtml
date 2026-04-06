@@ -43,9 +43,13 @@
                 <a asp-controller="RealEstate" asp-action="Details" asp-route-id="@property.Id" class="text-decoration-none">
                     <div class="card h-100 border-0 shadow-sm overflow-hidden property-card position-relative">
                         
-                        <button class="btn btn-light rounded-circle position-absolute top-0 end-0 m-3 shadow-sm d-flex align-items-center justify-content-center heart-btn" style="width: 36px; height: 36px; z-index: 2;" onclick="event.preventDefault();">
-                            <i class="bi bi-heart text-dark fs-6"></i>
-                        </button>
+                        <form asp-action="ToggleFavorite" asp-route-id="@property.Id" method="post" class="position-absolute top-0 end-0 m-3" style="z-index: 10;">
+                            <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+    
+                            <button type="submit" class="btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center heart-btn" style="width: 36px; height: 36px;">
+                                <i class="bi @(property.IsFavorite ? "bi-heart-fill text-danger" : "bi-heart text-dark") fs-6"></i>
+                            </button>
+                        </form>
 
                         <img src="@property.ImageUrl" class="card-img-top object-fit-cover" style="height: 240px;" alt="@property.Title" onerror="this.src='/images/default-property.jpg'">
                         

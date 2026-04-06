@@ -21,7 +21,7 @@ public class RealEstateService : IRealEstateService
         this.baseRepository = baseRepository;
     }
 
-    public async Task<AllRealEstatesQueryModel> GetAllRealEstatesAsync(AllRealEstatesQueryModel queryModel)
+    public async Task<AllRealEstatesQueryModel> GetAllRealEstatesAsync(AllRealEstatesQueryModel queryModel, string? userId = null)
     {
         var query = baseRepository
             .AllReadonly<RealEstate>()
@@ -68,7 +68,9 @@ public class RealEstateService : IRealEstateService
                 Address = $"{re.City.Name}, {re.Address}",
                 RoomsCount = re.RoomsCount,
                 BedroomsCount = re.BedroomsCount,
-                BathroomsCount = re.BathroomsCount
+                BathroomsCount = re.BathroomsCount,
+                IsFavorite = userId != null &&
+                         re.FavoriteRealEstates.Any(f => f.UserId == userId)
             })
             .ToListAsync();
 
@@ -161,7 +163,7 @@ public class RealEstateService : IRealEstateService
         return realEstate.Id.ToString();
     }
 
-    public async Task<RealEstateDetailsViewModel?> GetDetailsByIdAsync(string id)
+    public async Task<RealEstateDetailsViewModel?> GetDetailsByIdAsync(string id, string? userId = null)
     {
         bool isValidGuid = Guid.TryParse(id, out Guid realEstateGuid);
         if (!isValidGuid) return null;
@@ -195,7 +197,9 @@ public class RealEstateService : IRealEstateService
                 AgentName = re.Agent.FullName,
                 AgentPhoneNumber = re.Agent.PhoneNumber,
                 AgentEmail = re.Agent.User.Email,
-                AgentAvatarUrl = re.Agent.AvatarUrl
+                AgentAvatarUrl = re.Agent.AvatarUrl,
+                IsFavorite = userId != null &&
+                         re.FavoriteRealEstates.Any(f => f.UserId == userId)
             })
             .FirstOrDefaultAsync();
     }
@@ -363,6 +367,85 @@ public class RealEstateService : IRealEstateService
             .AnyAsync(re => re.Id.ToString() == realEstateId && re.AgentId.ToString() == agentId);
     }
 
+    public async Task<IEnumerable<AdminRealEstateViewModel>> GetAllForAdminAsync()
+    {
+        return await baseRepository.AllReadonly<RealEstate>()
+        .Where(re => !re.IsDeleted)
+        .Select(re => new AdminRealEstateViewModel
+        {
+            Id = re.Id.ToString(),
+            Title = re.Category.Name,
+            Price = re.Price,
+            Address = re.City.Name + ", " + re.Address,
+            AgentName = re.Agent.FullName,
+            AgentEmail = re.Agent.User.Email
+        })
+        .ToListAsync();
+    }
+
+    public async Task<bool> ToggleFavoriteAsync(string realEstateId, string userId)
+    {
+        var property = await baseRepository
+            .AllReadonly<RealEstate>()
+            .Include(re => re.Agent)
+            .FirstOrDefaultAsync(re => re.Id.ToString() == realEstateId);
+
+        if (property != null)
+        {
+            if (property.Agent.UserId == userId)
+            {
+                return false;
+            }
+        }
+
+        var favorite = await baseRepository
+            .All<UserFavoriteRealEstate>()
+            .FirstOrDefaultAsync(f => f.RealEstateId.ToString() == realEstateId && f.UserId == userId);
+
+        if (favorite == null)
+        {
+            await baseRepository.AddAsync(new UserFavoriteRealEstate
+            {
+                RealEstateId = Guid.Parse(realEstateId),
+                UserId = userId
+            });
+            await baseRepository.SaveChangesAsync();
+            return true;
+        }
+        else
+        {
+            baseRepository.Delete(favorite);
+            await baseRepository.SaveChangesAsync();
+            return false;
+        }
+    }
+
+    public async Task<bool> IsFavoriteAsync(string realEstateId, string userId)
+    {
+        return await baseRepository
+            .AllReadonly<UserFavoriteRealEstate>()
+            .AnyAsync(f => f.RealEstateId.ToString() == realEstateId && f.UserId == userId);
+    }
+
+    public async Task<IEnumerable<FavoriteRealEstateViewModel>> GetFavoritesByUserIdAsync(string userId)
+    {
+        return await baseRepository.AllReadonly<UserFavoriteRealEstate>()
+        .Where(f => f.UserId == userId && !f.RealEstate.IsDeleted)
+        .Select(f => new FavoriteRealEstateViewModel
+        {
+            Id = f.RealEstateId.ToString(),
+            Title = f.RealEstate.Category.Name,
+            Price = f.RealEstate.Price,
+            ImageUrl = f.RealEstate.RealEstateImages
+                .OrderBy(img => img.Id)
+                .Select(img => img.ImageUrl)
+                .FirstOrDefault() ?? "/images/default-property.jpg",
+            Address = f.RealEstate.Address,
+            Area = f.RealEstate.Area
+        })
+        .ToListAsync();
+    }
+
     private async Task SaveImagesToRealEstateAsync(IEnumerable<IFormFile>? images, string imageFolderPath, RealEstate realEstate)
     {
         if (images == null || !images.Any())
@@ -421,21 +504,5 @@ public class RealEstateService : IRealEstateService
 
             baseRepository.Delete(img);
         }
-    }
-
-    public async Task<IEnumerable<AdminRealEstateViewModel>> GetAllForAdminAsync()
-    {
-        return await baseRepository.AllReadonly<RealEstate>()
-        .Where(re => !re.IsDeleted)
-        .Select(re => new AdminRealEstateViewModel
-        {
-            Id = re.Id.ToString(),
-            Title = re.Category.Name,
-            Price = re.Price,
-            Address = re.City.Name + ", " + re.Address,
-            AgentName = re.Agent.FullName,
-            AgentEmail = re.Agent.User.Email
-        })
-        .ToListAsync();
     }
 }
