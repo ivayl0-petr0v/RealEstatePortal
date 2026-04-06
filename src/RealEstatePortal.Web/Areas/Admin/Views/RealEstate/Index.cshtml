@@ -1,0 +1,63 @@
+﻿@model IEnumerable<RealEstatePortal.Web.ViewModels.Admin.AdminRealEstateViewModel>
+
+@{
+    ViewData["Title"] = "Manage Properties";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold" style="color: #008C72;"><i class="bi bi-houses me-2"></i>Manage Properties</h2>
+        <span class="badge fs-6 py-2 px-3 rounded-pill" style="background-color: #008C72;">Total: @Model.Count()</span>
+    </div>
+
+    <div class="d-flex flex-column gap-3">
+        @if (!Model.Any())
+        {
+            <div class="form-card text-center py-5 text-muted">
+                <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                No properties found in the system.
+            </div>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <div class="form-card property-card p-3 mb-0">
+                    <div class="row align-items-center m-0">
+                        
+                        <div class="col-md-5">
+                            <h6 class="fw-bold mb-1 text-dark">@item.Title</h6>
+                            <p class="text-muted small mb-0"><i class="bi bi-geo-alt small me-1"></i>@item.Address</p>
+                        </div>
+
+                        <div class="col-md-2">
+                            <h5 class="fw-bold mb-0" style="color: #008C72;">@item.Price.ToString("N0") €</h5>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="d-flex flex-column">
+                                <span class="fw-medium text-dark">@item.AgentName</span>
+                                <small class="text-muted">@item.AgentEmail</small>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="d-flex justify-content-end gap-2">
+                                <a href="/RealEstate/Details/@item.Id" target="_blank" class="btn btn-outline-theme btn-sm d-flex align-items-center px-3 py-1">
+                                    <i class="bi bi-eye me-1"></i> View
+                                </a>
+
+                                <form asp-area="Admin" asp-controller="RealEstate" asp-action="Delete" asp-route-id="@item.Id" method="post" onsubmit="return confirm('Are you sure you want to delete this listing as Administrator?');">
+                                    <button type="submit" class="btn btn-danger btn-sm rounded-pill px-3 py-1 d-flex align-items-center">
+                                        <i class="bi bi-trash me-1"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

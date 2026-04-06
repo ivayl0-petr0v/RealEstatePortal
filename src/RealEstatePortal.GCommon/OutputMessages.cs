@@ -105,4 +105,9 @@ public static class OutputMessages
         public const string DeleteRealEstateLogError = "Unexpected error occurred while deleting the property {0}";
         public const string DeleteRealEstateModelError = "An unexpected error occurred. Please try again later.";
     }
+
+    public static class Admin
+    {
+        public const string RealEstateDeletedSuccessfullyByAdmin = "Property was successfully deleted by Administrator.";
+    }
 }
