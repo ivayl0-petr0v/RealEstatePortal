@@ -101,7 +101,7 @@ The project goes beyond standard CRUD operations, focusing on **Scalability**, *
 | **SQL Server** | 2022 | Relational Database |
 | **NUnit / Moq** | - | Unit Testing of Business Logic |
 | **Bootstrap** | 5.3 | Responsive Frontend Framework |
-| **Inter Font** | - | Primary Typography for Modern UI |
+| **Montserrat Font** | - | Primary Typography for Modern UI |
 
 ---
 
