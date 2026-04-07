@@ -204,7 +204,7 @@ public class RealEstateService : IRealEstateService
             .FirstOrDefaultAsync();
     }
 
-    public async Task<IEnumerable<AllRealEstatesViewModel>> GetTopThreeRealEstatesAsync()
+    public async Task<IEnumerable<AllRealEstatesViewModel>> GetTopThreeRealEstatesAsync(string? currentUserId = null)
     {
         return await baseRepository
             .AllReadonly<RealEstate>()
@@ -223,7 +223,8 @@ public class RealEstateService : IRealEstateService
             Address = $"{r.City.Name}, {r.Address}",
             RoomsCount = r.RoomsCount,
             BedroomsCount = r.BedroomsCount,
-            BathroomsCount = r.BathroomsCount
+            BathroomsCount = r.BathroomsCount,
+            IsFavorite = currentUserId != null && r.FavoriteRealEstates.Any(f => f.UserId == currentUserId)
         })
         .ToListAsync();
     }

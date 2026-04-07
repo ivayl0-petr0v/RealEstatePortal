@@ -32,8 +32,19 @@ public class RealEstateServiceTests
     [TearDown]
     public void TearDown()
     {
-        dbContext.Dispose();
+        if (repository is IDisposable disposableRepo)
+        {
+            disposableRepo.Dispose();
+        }
+
+        if (dbContext != null)
+        {
+            dbContext.Dispose();
+        }
+
         repository = null!;
+        dbContext = null!;
+        realEstateService = null!;
     }
 
     [Test]
