@@ -44,33 +44,53 @@ To make testing easier, the application comes with pre-seeded accounts for each 
 
 ---
 
-## ⚙️ Installation & Setup
+## 🚀 Getting Started
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/YourUsername/RealEstateApp.git
-    ```
-2.  **Configure the Database:**
-    Update the connection string in `appsettings.json` to match your local SQL Server instance:
-    ```json
-    "ConnectionStrings": {
-        "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=RealEstatePortal;Trusted_Connection=True;MultipleActiveResultSets=true"
-    }
-    ```
-3.  **Open in Visual Studio**
-    * Open the .sln file
-    * Restore NuGet packages
-    
-5.  **Apply Migrations:**
-    Run the following command in the Package Manager Console:
-    ```bash
-    Update-Database
-    ```
-6.  **Run the Application:**
-    Press `F5` in Visual Studio or use the terminal:
-    ```bash
-    dotnet run
-    ```
+Follow these steps to get the project running locally.
+
+### 1. Clone the repository
+
+```bash
+[https://github.com/ivayl0-petr0v/RealEstatePortal]
+cd RealEstatePortal
+```
+
+### 2. Restore dependencies
+
+```bash
+dotnet restore
+```
+
+### 3. Apply database migrations
+
+```bash
+dotnet ef database update
+```
+
+### 4. Run the application
+
+```bash
+dotnet run
+```
+---
+## 🗄️ Database Setup
+
+The project uses **Entity Framework Core** with a Code-First approach.
+
+Connection string is configured in `appsettings.Development.json`:
+
+```json
+"ConnectionStrings": {
+  "DefaultConnection": "Server=.;Database=RealEstatePortal;Trusted_Connection=True;Encrypt=False"
+}
+```
+
+To create and seed the database:
+
+```bash
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+```
 
 ---
 
