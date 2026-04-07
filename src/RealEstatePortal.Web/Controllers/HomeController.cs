@@ -40,4 +40,15 @@ public class HomeController : BaseController
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
+
+    [Route("Home/Error/{statusCode}")]
+    public IActionResult Error(int statusCode)
+    {
+        if (statusCode == 404)
+        {
+            return View("Error404");
+        }
+
+        return View("Error500");
+    }
 }

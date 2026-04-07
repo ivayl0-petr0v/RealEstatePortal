@@ -58,6 +58,7 @@ public class Program
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 
+        app.UseStatusCodePagesWithReExecute("/Home/Error/{0}");
         app.UseRouting();
 
         app.UseAuthentication();

@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Server Error";
+}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="form-card text-center p-5" style="max-width: 600px; width: 100%;">
+        <h1 class="display-1 mb-3 text-danger" style="font-weight: 700;">500</h1>
+        <h3 class="mb-4">Internal Server Error</h3>
+        
+        <p class="text-muted mb-5" style="font-size: 1.1rem;">
+            Something went wrong on our end. We are currently working to fix the issue. Please try again later.
+        </p>
+        
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-theme btn-lg">
+            <i class="bi bi-arrow-clockwise me-2"></i> Try Again Later
+        </a>
+    </div>
+</div>
