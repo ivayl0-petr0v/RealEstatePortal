@@ -9,7 +9,7 @@ public interface IAgentService
 
     Task<bool> UserWithPhoneNumberExistsAsync(string phoneNumber);
 
-    Task<IEnumerable<AllAgentsViewModel>> GetAllAgentsAsync();
+    Task<AllAgentsQueryModel> GetAllAgentsAsync(AllAgentsQueryModel queryModel);
 
     Task CreateAgentAsync(string userId, AgentFormModel model);
 

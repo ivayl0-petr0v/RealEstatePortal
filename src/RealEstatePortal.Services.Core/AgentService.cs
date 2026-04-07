@@ -28,10 +28,16 @@ public class AgentService : IAgentService
         return agentRepository.UserWithPhoneNumberExistsAsync(phoneNumber);
     }
 
-    public async Task<IEnumerable<AllAgentsViewModel>> GetAllAgentsAsync()
+    public async Task<AllAgentsQueryModel> GetAllAgentsAsync(AllAgentsQueryModel queryModel)
     {
-        var allAgents = await agentRepository
-            .AllReadonly<Agent>()
+        var query = agentRepository.AllReadonly<Agent>()
+                                   .OrderByDescending(a => a.Id);
+
+        queryModel.TotalAgentsCount = await query.CountAsync();
+
+        queryModel.Agents = await query
+            .Skip((queryModel.CurrentPage - 1) * queryModel.AgentsPerPage)
+            .Take(queryModel.AgentsPerPage)
             .Select(a => new AllAgentsViewModel
             {
                 Id = a.Id.ToString(),
@@ -40,9 +46,9 @@ public class AgentService : IAgentService
                 PhoneNumber = a.PhoneNumber,
                 AvatarUrl = a.AvatarUrl ?? "/images/default-avatar.png"
             })
-            .ToArrayAsync();
+            .ToListAsync();
 
-        return allAgents;
+        return queryModel;
     }
 
     public async Task CreateAgentAsync(string userId, AgentFormModel model)
