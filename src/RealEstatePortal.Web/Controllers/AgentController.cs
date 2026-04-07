@@ -20,12 +20,12 @@ public class AgentController : BaseController
     }
 
     [AllowAnonymous]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index([FromQuery] AllAgentsQueryModel queryModel)
     {
-        IEnumerable<AllAgentsViewModel> allAgents = await agentService
-            .GetAllAgentsAsync();
+        var model = await agentService
+            .GetAllAgentsAsync(queryModel);
 
-        return View(allAgents);
+        return View(model);
     }
 
     [HttpGet]
@@ -82,8 +82,10 @@ public class AgentController : BaseController
     [AllowAnonymous]
     public async Task<IActionResult> Details(string id)
     {
+        var userId = GetCurrentUserId();
+
         AgentDetailsViewModel? agentDetailsModel = await agentService
-            .GetAgentDetailsByIdAsync(id);
+            .GetAgentDetailsByIdAsync(id, userId);
 
         if (agentDetailsModel == null)
         {

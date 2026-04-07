@@ -1,4 +1,6 @@
-﻿namespace RealEstatePortal.Web.ViewModels.Agent;
+﻿using RealEstatePortal.Web.ViewModels.RealEstate;
+
+namespace RealEstatePortal.Web.ViewModels.Agent;
 
 public class AgentDetailsViewModel
 {
@@ -33,5 +35,6 @@ public class AgentDetailsViewModel
 
     public string? InstagramUrl { get; set; }
 
-    // public IEnumerable<RealEstateCardViewModel> Properties { get; set; } = new List<RealEstateCardViewModel>();
+    public IEnumerable<AllRealEstatesViewModel> AgentRealEstates { get; set; }
+        = new List<AllRealEstatesViewModel>();
 }

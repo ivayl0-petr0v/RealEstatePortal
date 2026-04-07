@@ -21,9 +21,11 @@ public class HomeController : BaseController
 
     public async Task<IActionResult> Index()
     {
+        var userId = GetCurrentUserId();
+
         var model = new HomeViewModel
         {
-            RealEstates = await realEstateService.GetTopThreeRealEstatesAsync(),
+            RealEstates = await realEstateService.GetTopThreeRealEstatesAsync(userId),
             Agents = await agentService.GetTopFourAgentsAsync()
         };
 

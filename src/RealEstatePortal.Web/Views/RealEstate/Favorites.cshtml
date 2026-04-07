@@ -27,11 +27,12 @@
 				<div class="col" id="favorite-card-@property.Id">
 					<div class="card h-100 border-0 shadow-sm property-card position-relative overflow-hidden">
                         
-						<button class="btn btn-light rounded-circle position-absolute top-0 end-0 m-3 shadow-sm d-flex align-items-center justify-content-center heart-btn active"
-								onclick="removeFromFavorites('@property.Id')"
-								style="width: 36px; height: 36px; z-index: 2;">
-							<i class="bi bi-heart-fill text-danger fs-6"></i>
-						</button>
+						<form asp-controller="RealEstate" asp-action="ToggleFavorite" asp-route-id="@property.Id" method="post" class="position-absolute top-0 end-0 m-3" style="z-index: 10;">
+							<input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+							<button type="submit" class="btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center heart-btn" style="width: 36px; height: 36px;">
+								<i class="bi bi-heart-fill text-danger fs-6"></i>
+							</button>
+						</form>
 
 						<a asp-action="Details" asp-route-id="@property.Id" class="text-decoration-none text-dark">
 							<img src="@property.ImageUrl" class="card-img-top object-fit-cover" style="height: 200px;" alt="@property.Title" onerror="this.src='/images/default-property.jpg'">

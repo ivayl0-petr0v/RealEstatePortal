@@ -91,7 +91,7 @@
 
 				<div class="d-flex flex-wrap gap-4 text-muted border-top pt-3">
 					<span class="d-flex align-items-center"><i class="bi bi-door-open me-2 fs-5"></i> @Model.RoomsCount rooms</span>
-					<span class="d-flex align-items-center"><i class="bi bi-bed me-2 fs-5"></i> @Model.BedroomsCount beds</span>
+					<span class="d-flex align-items-center"><i class="fas fa-bed me-1" style="font-size: 0.9rem;"></i> @Model.BedroomsCount beds</span>
 					<span class="d-flex align-items-center"><i class="bi bi-droplet me-2 fs-5"></i> @Model.BathroomsCount baths</span>
 				</div>
 			</div>
@@ -128,7 +128,7 @@
 
 			<div class="form-card">
 				<h5 class="mb-3">Property Description</h5>
-				<p class="text-muted mb-0" style="line-height: 1.6; text-align: justify; white-space: pre-line;">
+				<p class="text-muted mb-0" style="line-height: 1.6; text-align: justify;">
 					@Model.Description
 				</p>
 			</div>
@@ -155,10 +155,6 @@
 						<span><i class="bi bi-envelope text-dark me-2"></i> @Model.AgentEmail</span>
 					}
 				</div>
-                
-				<a href="tel:@Model.AgentPhoneNumber" class="btn btn-outline-theme w-100 mt-4 d-flex align-items-center justify-content-center gap-2">
-					<i class="bi bi-telephone-fill"></i> Call Now
-				</a>
 			</div>
 
 			<div class="form-card">
@@ -220,14 +216,5 @@
 </div>
 
 @section Scripts {
-	<script>
-		function openGallery(index) {
-			var carouselElement = document.getElementById('galleryCarousel');
-			var carousel = bootstrap.Carousel.getOrCreateInstance(carouselElement);
-			carousel.to(index);
-            
-			var myModal = new bootstrap.Modal(document.getElementById('imageGalleryModal'));
-			myModal.show();
-		}
-	</script>
+	<script src="~/js/real-estate-gallery-carousel.js" asp-append-version="true"></script>
 }

@@ -18,7 +18,7 @@ public interface IRealEstateService
 
     Task<RealEstateDetailsViewModel?> GetDetailsByIdAsync(string id, string? userId = null);
 
-    Task<IEnumerable<AllRealEstatesViewModel>> GetTopThreeRealEstatesAsync();
+    Task<IEnumerable<AllRealEstatesViewModel>> GetTopThreeRealEstatesAsync(string? currentUserId = null);
 
     Task<RealEstateFormModel?> GetRealEstateForEditByIdAsync(string id);
 

@@ -1,0 +1,72 @@
+﻿<header>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark py-3 border-bottom border-secondary border-opacity-25">
+		<div class="container">
+            
+			<a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+				<img src="/images/logo.png" alt="EstateFlow Logo" class="img-fluid" style="height: 35px; width: auto;">
+			</a>
+
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="navbar-collapse collapse d-lg-flex justify-content-between align-items-center">
+                
+				<ul class="navbar-nav mb-2 mb-lg-0 gap-3 fw-medium fs-6 text-center mt-3 mt-lg-0">
+					<li class="nav-item">
+						<a class="nav-link text-white" asp-area="" asp-controller="RealEstate" asp-action="Index">Properties</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link text-white" asp-area="" asp-controller="Agent" asp-action="Index">Agents</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link text-white" asp-area="" asp-controller="RealEstate" asp-action="Favorites">Favorites</a>
+					</li>
+                    
+					@if (User.IsInRole("Administrator"))
+					{
+						<li class="nav-item">
+							<a class="nav-link text-danger fw-bold" asp-area="Admin" asp-controller="Home" asp-action="Index">
+								<i class="bi bi-shield-lock me-1"></i> Admin
+							</a>
+						</li>
+					}
+				</ul>
+
+				<div class="d-flex flex-column flex-lg-row align-items-center gap-3 mt-3 mt-lg-0">
+					<a asp-area="" asp-controller="RealEstate" asp-action="Create" class="btn btn-outline-light rounded-pill px-4 py-2" style="font-size: 0.95rem;">Upload property</a>
+					<a asp-area="" asp-controller="Agent" asp-action="Create" class="btn btn-outline-light rounded-pill px-4 py-2" style="font-size: 0.95rem;">Create agent</a>
+					@if (User?.Identity?.IsAuthenticated ?? false)
+					{
+						<ul class="navbar-nav ms-lg-3 gap-2 fw-medium text-center align-items-center">
+							<li class="nav-item">
+								<a class="nav-link text-white text-decoration-underline" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+									<i class="bi bi-person-circle me-1"></i> @User.Identity.Name
+								</a>
+							</li>
+							<li class="nav-item">
+								<form class="form-inline m-0" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+									<button type="submit" class="btn nav-link text-white border-0 bg-transparent fw-bold" style="cursor: pointer;">
+										Logout
+									</button>
+								</form>
+							</li>
+						</ul>
+					}
+					else
+					{
+						<ul class="navbar-nav ms-lg-3 gap-2 fw-medium text-center">
+							<li class="nav-item">
+								<a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Register">Register</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link text-white" asp-area="Identity" asp-page="/Account/Login">Login</a>
+							</li>
+						</ul>
+					}
+    
+				</div>
+			</div>
+		</div>
+	</nav>
+</header>

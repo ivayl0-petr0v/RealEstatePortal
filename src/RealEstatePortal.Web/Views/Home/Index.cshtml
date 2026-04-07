@@ -10,11 +10,6 @@
         
         <div style="max-width: 450px; margin: 0 auto;">
             
-            <div class="bg-white rounded-pill p-1 mb-3 d-flex shadow-sm">
-                <button class="btn hero-toggle-btn active rounded-pill flex-grow-1 fw-medium">Sale</button>
-                <button class="btn hero-toggle-btn rounded-pill flex-grow-1 fw-medium">Rent</button>
-            </div>
-
             <form method="get" asp-controller="RealEstate" asp-action="Index" class="bg-white rounded-pill p-2 d-flex align-items-center shadow-sm">
                 <i class="bi bi-search text-muted ms-3 me-2 fs-5"></i>
                 <div class="flex-grow-1 text-start">
@@ -43,7 +38,7 @@
                 <a asp-controller="RealEstate" asp-action="Details" asp-route-id="@property.Id" class="text-decoration-none">
                     <div class="card h-100 border-0 shadow-sm overflow-hidden property-card position-relative">
                         
-                        <form asp-action="ToggleFavorite" asp-route-id="@property.Id" method="post" class="position-absolute top-0 end-0 m-3" style="z-index: 10;">
+                        <form asp-controller="RealEstate" asp-action="ToggleFavorite" asp-route-id="@property.Id" method="post" class="position-absolute top-0 end-0 m-3" style="z-index: 10;">
                             <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
     
                             <button type="submit" class="btn btn-light rounded-circle shadow-sm d-flex align-items-center justify-content-center heart-btn" style="width: 36px; height: 36px;">
