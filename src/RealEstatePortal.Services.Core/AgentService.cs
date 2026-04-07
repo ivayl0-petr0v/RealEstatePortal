@@ -5,6 +5,7 @@ using Data.Models;
 using Data.Repository.Contracts;
 using Microsoft.EntityFrameworkCore;
 using RealEstatePortal.GCommon.Exceptions;
+using RealEstatePortal.Web.ViewModels.RealEstate;
 using Web.ViewModels.Agent;
 
 public class AgentService : IAgentService
@@ -100,7 +101,8 @@ public class AgentService : IAgentService
         }
     }
 
-    public async Task<AgentDetailsViewModel?> GetAgentDetailsByIdAsync(string id)
+    // ДОБАВЯМЕ currentUserId като опционален параметър заради Любими
+    public async Task<AgentDetailsViewModel?> GetAgentDetailsByIdAsync(string id, string? currentUserId = null)
     {
         if (!Guid.TryParse(id, out Guid agentId))
         {
@@ -129,8 +131,24 @@ public class AgentService : IAgentService
                 WebsiteUrl = a.WebsiteUrl,
                 InstagramUrl = a.InstagramUrl,
                 SpokenLanguages = a.SpokenLanguages
-                .Select(sl => sl.Language.Name)
-                .ToArray()
+                    .Select(sl => sl.Language.Name)
+                    .ToArray(),
+                AgentRealEstates = a.RealEstates
+                    .Where(re => re.IsDeleted == false)
+                    .Select(re => new AllRealEstatesViewModel
+                    {
+                        Id = re.Id.ToString(),
+                        ImageUrl = re.RealEstateImages.Select(img => img.ImageUrl).FirstOrDefault() ?? "/images/default-property.jpg",
+                        Price = re.Price,
+                        Title = re.Category.Name,
+                        Area = re.Area,
+                        Address = $"{re.City.Name}, {re.Address}",
+                        RoomsCount = re.RoomsCount,
+                        BedroomsCount = re.BedroomsCount,
+                        BathroomsCount = re.BathroomsCount,
+                        IsFavorite = currentUserId != null && re.FavoriteRealEstates.Any(f => f.UserId == currentUserId)
+                    })
+                    .ToList()
             })
             .FirstOrDefaultAsync();
 

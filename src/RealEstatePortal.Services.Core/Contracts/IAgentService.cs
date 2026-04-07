@@ -13,7 +13,7 @@ public interface IAgentService
 
     Task CreateAgentAsync(string userId, AgentFormModel model);
 
-    Task<AgentDetailsViewModel?> GetAgentDetailsByIdAsync(string id);
+    Task<AgentDetailsViewModel?> GetAgentDetailsByIdAsync(string id, string? currentUserId = null);
 
     Task<AgentFormModel?> GetAgentForEditAsync(string id);
 

@@ -82,8 +82,10 @@ public class AgentController : BaseController
     [AllowAnonymous]
     public async Task<IActionResult> Details(string id)
     {
+        var userId = GetCurrentUserId();
+
         AgentDetailsViewModel? agentDetailsModel = await agentService
-            .GetAgentDetailsByIdAsync(id);
+            .GetAgentDetailsByIdAsync(id, userId);
 
         if (agentDetailsModel == null)
         {
