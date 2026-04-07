@@ -390,12 +390,14 @@ public class RealEstateService : IRealEstateService
             .Include(re => re.Agent)
             .FirstOrDefaultAsync(re => re.Id.ToString() == realEstateId);
 
-        if (property != null)
+        if (property == null)
         {
-            if (property.Agent.UserId == userId)
-            {
-                return false;
-            }
+            return false;
+        }
+
+        if (property.Agent.UserId == userId)
+        {
+            return false;
         }
 
         var favorite = await baseRepository
@@ -404,6 +406,7 @@ public class RealEstateService : IRealEstateService
 
         if (favorite == null)
         {
+            
             await baseRepository.AddAsync(new UserFavoriteRealEstate
             {
                 RealEstateId = Guid.Parse(realEstateId),
