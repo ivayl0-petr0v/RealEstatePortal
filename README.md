@@ -52,7 +52,6 @@ Follow these steps to get the project running locally.
 
 ```bash
 [https://github.com/ivayl0-petr0v/RealEstatePortal]
-cd RealEstatePortal
 ```
 
 ### 2. Restore dependencies
